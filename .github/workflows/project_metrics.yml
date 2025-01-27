@@ -41,7 +41,7 @@ jobs:
         shell: bash
       - name: Run metrics generator
         run: |
-          cd inso-gh-query-metrics
+          cd inso-gh-query-metrics/src
           poetry run python generateMilestoneMetricsForActions.py ${{ github.workspace }}/gh_metrics_config.json
         shell: bash
         env:
