@@ -3,6 +3,14 @@
 The famous card game, now on web.
 
 ---
+# Setup
+1. Download and install the latest the latest version of Node.js at https://nodejs.org/en/download
+2. Click trough the installer, leaving everything at it's default state up utill the last page (the one that mentions "chocolatey")
+3. Check the box that mentions the instalation of any necessary drivers and "chocolatey"
+4. As Choclatey installs, open your compiler of choice and git clone the repository (it should contain both the Node.js settup and Express)
+5. If the express half of the project doesn't appear to work for you, within the compiler, open a cmd window and type `npm install express`, then hit enter and let it load
+6. Don't forget to let Choclatey finish installing files! Let it finish first.
+---
 # Requirements
 
 ## **Milestone 1: Single-Player Game**
