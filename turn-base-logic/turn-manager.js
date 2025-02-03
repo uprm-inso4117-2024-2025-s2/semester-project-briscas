@@ -9,6 +9,19 @@ class Player {
         this.score = 0;
     }
 
+    hasCard(card) {
+        return this.hand.some(c => c.id === card.id);
+      }
+    
+      // Removes a card from the player's hand.
+      removeCard(card) {
+        const index = this.hand.findIndex(c => c.id === card.id);
+        if (index === -1) {
+          throw new Error(`${this.name} does not have the card ${card.name}.`);
+        }
+        this.hand.splice(index, 1);
+      }
+
 }
 
 class TurnManager {
@@ -17,8 +30,8 @@ class TurnManager {
         this.players = [player1,player2];
         this.player1 = player1;
         this.player2 = player2;
+        
         this.currentTurnIndex = Math.floor(Math.random() * 2);
-        this.currentRoundMoves = [];
     }
 
     // Get Player that is supposed to play a card
@@ -31,35 +44,11 @@ class TurnManager {
         return this.getCurrentPlayer().id == player.id
     }
 
-    // Process a move (for example, playing a card).
-    playMove(player, move) {
-        if (!this.isPlayersTurn(player)) {
-            throw new Error(`Invalid move: It's not ${player.name}'s turn!`);
-        }
-
-        // Record the move.
-        this.currentRoundMoves.push({ player, move });
-        console.log(`${player.name} played ${move.name || move}.`);
-
-        // After processing the move, switch turns.
-        this.switchTurn();
-    }
-
     // Switch turn to the next player.
     switchTurn() {
         this.currentTurnIndex = (this.currentTurnIndex + 1) % this.players.length;
         console.log(`Turn switched. It is now ${this.getCurrentPlayer().name}'s turn.`);
     }
 
-    // Utility to check if the round is complete (i.e., all players have made a move).
-    isRoundComplete() {
-        return this.currentRoundMoves.length === this.players.length;
-    }
-
-    // Reset moves for a new round.
-    resetRound() {
-        this.currentRoundMoves = [];
-        console.log('Round reset.');
-  }
 
 }
