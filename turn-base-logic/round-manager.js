@@ -1,12 +1,13 @@
+import { TurnManager } from './turn-manager.js';
 class RoundManager {
     constructor(players) {
-        this.turnManager = new TurnManager(players);
+        this.turnManager = new TurnManager(players[0], players[1]);
         this.roundMoves = [];
     }
 
     startRound() {
         this.roundMoves = [];
-        console.log(`New round started. It is ${this.turnManager.getCurrentPlayer().name}'s turn.`);
+        console.log(`New round started. It is ${this.turnManager.getCurrentPlayer()}'s turn.`);
     }
 
     // Process a move (for example, playing a card).
@@ -26,7 +27,7 @@ class RoundManager {
         console.log(`${player.name} played ${move.name || move}.`);
 
         // After processing the move, switch turns.
-        turnManager.switchTurn();
+        this.turnManager.switchTurn();
 
         if (this.roundMoves.length === this.turnManager.players.length) {
             this.endRound();
@@ -46,7 +47,7 @@ class RoundManager {
 
     // Utility to check if the round is complete (i.e., all players have made a move).
     isRoundComplete() {
-        return this.roundMoves.length === this.players.length;
+        return this.roundMoves.length === this.turnManager.players.length;
     }
 
     // Reset moves for a new round.
@@ -56,3 +57,4 @@ class RoundManager {
   }
 
 }
+export { RoundManager };

@@ -4,7 +4,7 @@
 class Player {
     constructor(id,name,hand=[]){
         this.id =id;
-        this.name =name;
+        this.name = name;
         this.hand = hand;
         this.score = 0;
     }
@@ -50,5 +50,6 @@ class TurnManager {
         console.log(`Turn switched. It is now ${this.getCurrentPlayer().name}'s turn.`);
     }
 
-
 }
+// Export the classes using ES Modules syntax.
+export { Player, TurnManager };
