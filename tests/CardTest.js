@@ -1,4 +1,4 @@
-const Card = require("./Card");
+const Card = require("../models/Card");
 
 const card1 = new Card("Copas", "3");  // Displays the card 3 of Copas.
 console.log(card1.displayCard()); 
