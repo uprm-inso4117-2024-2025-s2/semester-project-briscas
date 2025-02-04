@@ -21,6 +21,27 @@ class Card {
 
         return current_card; 
     }
+
+    beats(otherCard, trumpSuit) {
+        // If this card is trump and other isn't, this card wins
+        if (this.suit === trumpSuit && otherCard.suit !== trumpSuit) {
+            return true;
+        }
+        
+        // If other card is trump and this isn't, other card wins
+        if (otherCard.suit === trumpSuit && this.suit !== trumpSuit) {
+            return false;
+        }
+        
+        // If both cards are the same suit, compare their ranks
+        if (this.suit === otherCard.suit) {
+            return this.ranks[this.rank] > this.ranks[otherCard.rank];
+        }
+        
+        // If different suits (and neither is trump), first card wins
+        return true;
+    }
 }
 
+// Make sure to export the entire class, not just an instance
 module.exports = Card;

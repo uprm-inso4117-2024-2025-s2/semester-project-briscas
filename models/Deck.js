@@ -3,9 +3,42 @@ const Card = require('./Card');
 class Deck {
     constructor() {
         this.deck = []; // Stores the 40 unique cards
+        this.trumpSuit = null; //Stores Trump suit
+        this.trumpCard = null; //Stores Trump card
         this.initializeDeck(); // Generate the deck
     }
+    //Getters and Setters
+    // Get the trump suit
+    getTrumpSuit() {
+        return this.trumpSuit;
+    }
 
+    // Get the trump card
+    getTrumpCard() {
+        return this.trumpCard;
+    }
+
+    // Check deck size
+    getDeckSize() {
+        return this.deck.length;
+    }
+
+    //Draws a card 
+    getCard() {
+        return this.deck.pop();
+    }
+
+    //Set up the trump suit
+    setupTrumpSuit() {
+        if (!this.trumpCard) {
+            this.trumpCard = this.getCard();
+            this.trumpSuit = this.trumpCard.suit;
+        }
+        return this.trumpCard;
+    }
+    
+    //Functions
+    
     // Initialize the deck by creating 40 unique cards
     initializeDeck() {
         const suits = ["Oros", "Copas", "Espadas", "Bastos"];
@@ -30,11 +63,6 @@ class Deck {
             throw new Error ("Cannot draw from an empty deck.");
         }
         return this.deck.pop();
-    }
-
-    // Check deck size
-    getDeckSize() {
-        return this.deck.length;
     }
 
     // Method to display all cards in the deck
