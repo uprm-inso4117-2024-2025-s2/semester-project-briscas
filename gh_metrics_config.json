@@ -1,25 +1,9 @@
 {
-    "version": "2.0",
-    "projectName": "briscas", 
-    "managers": [
-      "diegoq48",
-      "JuanDelPueblo"
-    ],
-    "milestones": {
-      "Milestone1": {
-        "startDate": "2025-01-01",
-        "endDate": "2025-02-15",
-        "projectedGroupGrade": 100.0
-      },
-      "Milestone2": {
-        "startDate": "2025-03-16",
-        "endDate": "2025-04-31",
-        "projectedGroupGrade": 100.0
-      }
-    },
-    "lectureTopicTaskQuota": 5,
-    "countOpenIssues": false,
-    "sprints": 3,
-    "minTasksPerSprint": 2
-  }
-  
+  "projectName": "personalFinanceManager",
+  "managers": ["diegoq48", "JuanDelPueblo"],
+  "milestoneName": "milestone1",
+  "milestoneStartDate": "2025-01-22",
+  "milestoneEndDate": "2025-02-22",
+  "groupGrade": 100.0,
+  "lectureTopicTaskQuota": 4
+}
