@@ -1,4 +1,4 @@
-const Card = require('./Card'); // Import the Card class
+const Card = require('./Card');
 
 class Deck {
     constructor() {
@@ -13,7 +13,23 @@ class Deck {
 
         this.deck = suits.flatMap(suit =>
             ranks.map(rank => new Card(suit, rank))
-        ).filter(card => card.suit && card.rank); // Remove invalid cards
+        );
+    }
+
+    // Fisher-Yates Shuffle Algorithm
+    shuffle() {
+        for (let i = this.deck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
+        }
+    }
+
+    // Draws the top card from the deck
+    draw() {
+        if (this.deck.length === 0) {
+            throw new Error ("Cannot draw from an empty deck.");
+        }
+        return this.deck.pop();
     }
 
     // Check deck size
