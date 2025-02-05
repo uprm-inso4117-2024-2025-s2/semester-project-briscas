@@ -46,7 +46,7 @@ jobs:
         shell: bash
         env:
           GITHUB_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
-          ORGANIZATION: "briscas-uprm-inso4117-2024-2025"
+          ORGANIZATION: "uprm-inso4117-2024-2025-s2"
       - name: Move Generated Metrics to Source Repo
         run: |
           mkdir -p ./metrics
