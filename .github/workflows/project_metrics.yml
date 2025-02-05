@@ -46,11 +46,11 @@ jobs:
         shell: bash
         env:
           GITHUB_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
-          ORGANIZATION: "uprm-inso4117-2024-2025-s2"
+          ORGANIZATION: "briscas-uprm-inso4117-2024-2025"
       - name: Move Generated Metrics to Source Repo
         run: |
           mkdir -p ./metrics
-          mv inso-gh-query-metrics/*${{ github.repository_owner }}.md metrics/
+          mv inso-gh-query-metrics/*briscas-uprm-inso4117-2024-2025*.md metrics/
         shell: bash
       - name: Auto Commit Results
         uses: stefanzweifel/git-auto-commit-action@v4
