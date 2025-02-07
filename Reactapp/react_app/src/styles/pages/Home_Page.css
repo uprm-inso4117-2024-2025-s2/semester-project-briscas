@@ -1,0 +1,14 @@
+
+  
+  /* Homepage Styles */
+  .homepage {
+    display: flex;
+
+    background: url('../assets/briscas.jpg') no-repeat center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+   
+    
+  }
+  
+  
