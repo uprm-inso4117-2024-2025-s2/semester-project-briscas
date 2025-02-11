@@ -75,10 +75,10 @@ class GameState {
         this.deck = deck;
     }
 
-    GetTrumSuit(){
+    GetTrumpSuit(){
         return this.trump_suit;
     }
-    ChangeTrumSuit(trump_suit){
+    ChangeTrumpSuit(trump_suit){
         this.trump_suit = trump_suit;
     }
 
