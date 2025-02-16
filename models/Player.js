@@ -12,13 +12,16 @@ class Player{
 
     playCard(card) {
         // Checks if the input card is a valid card
-        if (!card || !(card instanceof Card) || !(this.hand.includes(card))) {
+        if (!card || !(card instanceof Card)) {
             throw new Error("Invalid card played.");
         }
         //Checks if it is the player's turn
         if (this.isTurn) {
 
             // Checks if the card is in the player's hand
+            if(!this.hand.includes(card)){
+                throw new Error("Card is not in players hand.")
+            } 
 
             // Add the card to the temporary hand
             this.temporaryHand = card;
