@@ -1,4 +1,7 @@
 
+const Card = require("../models/Card");
+const RoundManager = require("../models/Winner");
+const Deck = require("../models/Deck");
 class GameState {
   constructor() {    
     this.game_states = ["New game", "Round start", "Playing", "Round end", "Game end"];
@@ -75,10 +78,10 @@ class GameState {
         this.deck = deck;
     }
 
-    GetTrumSuit(){
+    GetTrumpSuit(){
         return this.trump_suit;
     }
-    ChangeTrumSuit(trump_suit){
+    ChangeTrumpSuit(trump_suit){
         this.trump_suit = trump_suit;
     }
 
@@ -104,6 +107,21 @@ class GameState {
     ChangePlayerHands(hand, hand_2){
         this.player_hands[0] = hand;
         this.player_hands[1] = hand_2;
+    }
+
+    ResetGame(){
+        this.state = "New Game";
+        this.turn = ["1","2"];
+        this.player_turn = null;
+        // Deck
+        const deck = new Deck;
+        deck.shuffle();
+        this.trump_suit = deck.setupTrumpSuit();
+        this.deck = deck;
+        this.played_cards = [null,null];
+        this.scores = [0,0];
+        this.player_hands = [null, null];
+
     }
     }
 
