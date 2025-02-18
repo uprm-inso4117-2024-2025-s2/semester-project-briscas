@@ -11,6 +11,8 @@ import Profile from './pages/Profile'
 import Register from './pages/Register'
 import SignIn from './pages/SignIn'
 import HelpRules from './pages/HelpRules'
+import GameBoard from './pages/GameBoard';
+
 
 
 const router = createBrowserRouter([
@@ -22,6 +24,10 @@ const router = createBrowserRouter([
   { 
     path:'/Settings',
     element: <Settings/>
+  },
+  { 
+    path:'/GameBoard',
+    element: <GameBoard/>
   },
   
   // {
