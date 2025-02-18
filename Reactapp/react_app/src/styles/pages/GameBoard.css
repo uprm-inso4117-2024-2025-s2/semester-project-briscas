@@ -1,0 +1,54 @@
+body {
+    background-color: #E2FFFC;
+}
+
+#backgroundimg {
+    position: absolute;
+    top: 0px;
+    left: 280px;
+    width: 1300px;
+    height: 730px;
+    opacity: 15%;
+    overflow: hidden;
+}
+
+#briscasColimg {
+    position: absolute;
+    top: 200px;
+    left: -250px;
+    width: 740px;
+    transform: rotate(-90deg); /* Rotates the div 45 degrees */
+}
+
+#buttons1 {
+    position: absolute;
+    background-color: none;
+    top: 25px;
+    left: 40px;
+    width: 200px;
+}
+
+#buttons2 {
+    position: absolute;
+    background-color: none;
+    top: 520px;
+    left: 40px;
+    width: 200px;
+}
+
+.buttonPadding {
+    margin: 20px;
+    padding: 10px;
+    border-radius: 50px;
+    background-color: white;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.text {
+    font-weight: bold;
+    font-size: 20px;
+    color: #11524C;
+    text-decoration: none;
+}
