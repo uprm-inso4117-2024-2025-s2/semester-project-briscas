@@ -10,5 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.2.0"
+  },
+  "scripts": {
+    "test:features": "cucumber-js"
   }
 }
