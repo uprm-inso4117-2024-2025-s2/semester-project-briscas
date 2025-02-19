@@ -34,7 +34,7 @@ const player3 = new Player([card1], 0, true);
 
 console.log("Before draw(), Expected 1: ", player3.hand.length)
 
-player3.draw(deck.draw());
+player3.draw(deck);
 
 console.log("After draw(), Expected 2: ", player3.hand.length)
 
@@ -48,3 +48,10 @@ try{
 catch (error) {
     console.log("Expected error message received: \"It is not your turn to play a card.\", Result: ", error.message =="It is not your turn to play a card.");
 }
+
+console.log('-----------------------')
+
+const player5 = new Player([card1], 0, false)
+console.log('Player score before being updated, expected 0: ', player5.getScore())
+player5.setScore(10);
+console.log('Player score updated, expected value 10: ', player5.getScore())
