@@ -28,7 +28,8 @@ class Player{
     getScore(){
         return this.score;
     }
-    draw(drawnCard) {
+    draw(Deck) {
+        const drawnCard = Deck.draw()
         if (!this.isTurn) {
             //checks if it's not the player's turn
             throw new Error("It is not your turn to draw.");

@@ -34,7 +34,7 @@ const player3 = new Player([card1], 0, true);
 
 console.log("Before draw(), Expected 1: ", player3.hand.length)
 
-player3.draw(deck.draw());
+player3.draw(deck);
 
 console.log("After draw(), Expected 2: ", player3.hand.length)
 
