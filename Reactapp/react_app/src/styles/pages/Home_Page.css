@@ -1,14 +1,63 @@
 
   
   /* Homepage Styles */
+  
   .homepage {
     display: flex;
-
-    background: url('../assets/briscas.jpg') no-repeat center center;
-    background-size: contain;
+    background: url('/assets/briscasHome.jpg') no-repeat center calc(50% + 45px);
+    background-attachment: fixed;
+    background-size: cover;
     background-repeat: no-repeat;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    min-height: 100vh;  /* Ensures it covers the full screen */
+    width: 100%; 
    
     
+  }
+
+  .homepage-content {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 200px;
+    gap: 20px;
+}
+
+  .briscas-title{
+    font-size: 100px;
+    font-weight: bold;
+    margin-bottom: 0;
+    color: rgb(30,30,30);
+  }
+
+  .select-players-button {
+      width: 193px;
+      height: 34px;
+      font-size: medium;
+      padding: 10px 20px;
+      background: rgb(227, 227, 227);
+      color: rgb(30,30,30);
+      border: 1px solid rgb(30, 30, 30);
+      border-radius: 20px;
+      cursor: pointer;
+  }
+
+  .play-button{
+    width: 120px;
+    height: 36px;
+    font-size: small;
+    padding: 10px 20px;
+    background: rgb(30,30,30);
+    color: white;
+    border: rgb(30,30,30);
+    border-radius: 20px;
+    cursor: pointer;
   }
   
   
