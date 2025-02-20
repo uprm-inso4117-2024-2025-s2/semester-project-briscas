@@ -11,11 +11,15 @@ class Player{
     temporaryHand = null;
 
     playCard(card) {
+        // Doesn't allow more than one card to be played
+        if (arguments.length > 1) {
+            throw new Error("You cant play more than one card at a time.");
+        }
         // Checks if the input card is a valid card
         if (!card || !(card instanceof Card)) {
             throw new Error("Invalid card played.");
         }
-        //Checks if it is the player's turn
+        // Checks if it is the player's turn
         if (this.isTurn) {
 
             // Checks if the card is in the player's hand
@@ -43,6 +47,10 @@ class Player{
     }
 
     draw(drawnCard) {
+        // Doesn't allow more than one card to be drawn
+        if (arguments.length > 1) {
+            throw new Error("You cant draw more than one card at a time.");
+        }
         if (!this.isTurn) {
             throw new Error("It is not your turn to draw.");
         }
@@ -52,6 +60,10 @@ class Player{
         // Checks if the drawn card is valid
         if (!drawnCard) {
             throw new Error("The deck is empty.");
+        }
+        // If the player already has 3 or more cards, the player can't draw any more cards
+        if (this.hand.length >= 3) {
+            throw new Error("You can't draw any more cards.");
         }
         this.hand.push(drawnCard);
 
