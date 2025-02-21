@@ -108,3 +108,10 @@ catch (error) {
 }
 
 console.log('-----------------------')
+
+const player10 = new Player([card1], 0, false)
+console.log('Player score before being updated, expected 0: ', player10.getScore())
+player10.setScore(10);
+console.log('Player score updated, expected value 10: ', player10.getScore())
+
+console.log('-----------------------')
