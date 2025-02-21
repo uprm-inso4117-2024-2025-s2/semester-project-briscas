@@ -12,6 +12,28 @@
     "express": "^4.21.2"
   },
   "devDependencies": {
-    "@cucumber/cucumber": "^11.2.0"
+    "@cucumber/cucumber": "^11.2.0",
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5"
+  },
+
+  "scripts": {
+    "type": "node",
+    "request": "launch",
+    "name": "Jest Current File",
+    "program": "${workspaceFolder}/node_modules/.bin/jest",
+    "args": [
+      "--runTestsByPath",
+      "${relativeFile}",
+      "--config",
+      "jest.config.js"
+    ],
+    "console": "integratedTerminal",
+    "internalConsoleOptions": "neverOpen",
+    "disableOptimisticBPs": true,
+    "windows": {
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+    }
   }
 }
