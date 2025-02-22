@@ -1,0 +1,126 @@
+/* SignIn Page Styles */
+
+.signin-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    background: 
+        url('/assets/background1.jpg') no-repeat center left 160%,
+        url('/assets/dark.jpg') no-repeat center center;
+    background-size: cover;
+    position: fixed;
+}
+
+.signin-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    margin-left: 600px;
+    margin-top: 100px;
+}
+
+.signin-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: rgb(30, 30, 30);
+    margin-bottom: 20px;
+}
+
+.signin-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
+.name-fields {
+    display: flex;
+    gap: 30px;
+}
+
+.name-fields input {
+    width: 100%;
+    height: 40px;
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.signin-form label {
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(30,30,30);
+}
+
+.signin-form input {
+    width: 100%;
+    height: 40px;
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.signin-button {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    background: #005f3f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.signin-button:hover {
+    background: #00432d;
+}
+
+.divider {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin: 10px 0;
+}
+
+.google-signin-button {
+    width: 100%;
+    height: 40px;
+    font-size: 14px;
+    background: rgb(227, 227, 227);
+    color: rgb(30,30,30);
+    border: 1px solid rgb(30,30,30);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.google-signin-button:hover {
+    background: rgb(200, 200, 200);
+}
+
+.login-option {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-option a {
+    color: #005f3f;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-option a:hover {
+    text-decoration: underline;
+}
