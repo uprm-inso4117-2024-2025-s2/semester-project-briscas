@@ -1,6 +1,6 @@
 const GameState = require("../GameState");
-const Player = require("../Player") 
-const Card = require("../Card")
+const Player = require("../Player");
+const Card = require("../Card");
 
 class BriscaAI {
     constructor(gameState) {
@@ -8,26 +8,26 @@ class BriscaAI {
     }
 
     /**
-     * Step 1: Retrieve GameState data relevant to AI
+     * Step 1: Retrieve and validate GameState information
      */
     analyzeGameState() {
-        const currentPlayer = this.gameState.getCurrentPlayer();
+        const currentPlayerTurn = this.gameState.GetTurn();
 
-        // Ensure it's AI's turn before proceeding
-        if (!currentPlayer.isAI) {
-            console.log("Not AI's turn, skipping...");
+        if (currentPlayerTurn === null) {
+            console.warn("AI cannot analyze GameState: No active turn.");
             return;
         }
 
         console.log("AI analyzing game state...");
+        
+        const trumpSuit = this.gameState.GetTrumpSuit();
+        const playerIndex = currentPlayerTurn === "1" ? 0 : 1;
+        const aiHand = this.gameState.GetPlayerHand(playerIndex);
 
-        // Retrieve necessary game state details
-        const trumpSuit = this.gameState.getTrumpSuit();
-        const validMoves = this.gameState.getValidMoves(currentPlayer);
+        console.log(`Turn: Player ${currentPlayerTurn}`);
+        console.log(`Trump Suit: ${trumpSuit}`);
+        console.log("AI Hand:", aiHand.map(card => `${card.rank} of ${card.suit} (${card.points} points)`));
 
-        console.log(`Current player: ${currentPlayer.name}`);
-        console.log(`Trump suit: ${trumpSuit}`);
-        console.log(`Valid moves:`, validMoves);
     }
 }
 
