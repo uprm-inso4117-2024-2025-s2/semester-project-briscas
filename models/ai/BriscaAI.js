@@ -29,6 +29,33 @@ class BriscaAI {
         console.log("AI Hand:", aiHand.map(card => `${card.rank} of ${card.suit} (${card.points} points)`));
 
     }
-}
 
+
+    makeMove() {
+    const currentPlayerTurn = this.gameState.GetTurn();
+    if (currentPlayerTurn === null) {
+        console.warn("AI cannot move: No active turn.");
+        return null;
+    }
+
+    const playerIndex = currentPlayerTurn === "1" ? 0: 1;
+    const aiHand = this.gameState.GetPlayerHand(playerIndex);
+
+    if (!aiHand || aiHand.length === 0) {
+        console.warn("AI has no cards to play.");
+        return null;
+    }
+
+    // Prioritize playing the lowest-ranked card
+    const lowestCard = aiHand.reduce((lowest, card) => {
+        return card.points < lowest.points ? card : lowest;
+    }, aiHand[0]);
+
+    console.log(`AI (Easy Mode) chooses to play: ${lowestCard.rank} of ${lowestCard.suit} (${lowestCard.points} points)`);
+
+    this.gameState.PlayCard(playerIndex, lowestCard);
+    return lowestCard;
+    }
+
+}
 module.exports = BriscaAI;
