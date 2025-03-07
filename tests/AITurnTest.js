@@ -38,7 +38,7 @@ async function testMultipleAI() {
     const gameManager = new GameManager(['AI-1', 'AI-2', 'AI-3']);
     
     // Check if any player is not a proper AI and replace it with a proper one
-    const AIPlayer = require('../models/AIPlayer');
+    const AIPlayerModel = require("../models/ai/AIPlayerModel");//    const AIPlayer = require('../models/AIPlayer'); renamed
     for (let i = 0; i < gameManager.players.length; i++) {
         if (!gameManager.players[i].handleTurn) {
             console.log(`Replacing player ${i+1} with proper AIPlayer instance`);
@@ -46,7 +46,7 @@ async function testMultipleAI() {
             const hand = gameManager.players[i].hand;
             const score = gameManager.players[i].score;
             const isTurn = gameManager.players[i].isTurn;
-            gameManager.players[i] = new AIPlayer(hand, score, isTurn);
+            gameManager.players[i] = new AIPlayerModel(gameManager.gameState, hand, score, isTurn);
             gameManager.players[i].thinkingTime = 500; // Shorter thinking time for tests
         }
     }
