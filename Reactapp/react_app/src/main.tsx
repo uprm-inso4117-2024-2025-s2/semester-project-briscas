@@ -11,6 +11,7 @@ import Profile from './pages/Profile'
 import RegisterPage from './pages/RegisterPage'
 import SignInPage from './pages/SignInPage';
 import HelpRules from './pages/HelpRules'
+import PlayPage from './pages/Play'
 
 
 const router = createBrowserRouter([
@@ -24,10 +25,10 @@ const router = createBrowserRouter([
     element: <Settings/>
   },
   
-  // {
-  //   path: '/HelpRules',
-  //   element: <HelpRules/>
-  // },
+  {
+    path: '/HelpRules',
+    element: <HelpRules/>
+  },
   {
    path: '/Profile',
    element: <Profile/>
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: '/SignIn',
     element: <SignInPage/>
+  },
+  {
+    path: '/Play',
+    element: <PlayPage/>
   }
 
   

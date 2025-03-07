@@ -14,8 +14,8 @@
 
     min-height: 100vh;  /* Ensures it covers the full screen */
     width: 100%; 
-   
-    
+    margin-left: -9px;
+    position: fixed;
   }
 
   .homepage-content {
@@ -27,6 +27,7 @@
     align-items: center;
     margin-left: 200px;
     gap: 20px;
+    position: fixed;
 }
 
   .briscas-title{
@@ -34,6 +35,7 @@
     font-weight: bold;
     margin-bottom: 0;
     color: rgb(30,30,30);
+    
   }
 
   .select-players-button {
