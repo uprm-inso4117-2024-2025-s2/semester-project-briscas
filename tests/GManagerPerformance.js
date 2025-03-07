@@ -3,7 +3,7 @@ const Deck = require("../models/Deck");
 const Player = require("../models/Player");
 const GameState = require("../models/GameState");
 const RoundManager = require("../models/Winner");
-const AIPlayer = require("../models/AIPlayer");
+const AIPlayer = require("../models/ai/AIPlayerold");
 
 class GameManager {
   constructor(playerNames) {

@@ -2,7 +2,7 @@ const Deck = require("./Deck");
 const Player = require("./Player");
 const GameState = require("./GameState");
 const RoundManager = require("./Winner");
-const AIPlayer = require("./AIPlayer");
+const AIPlayerModel = require("../models/ai/AIPlayerModel"); //const AIPlayer = require("./AIPlayer"); Renamed
 
 class GameManager {
   constructor(playerNames) {
@@ -10,13 +10,14 @@ class GameManager {
     this.deck.shuffle();
     this.trumpCard = this.deck.setupTrumpSuit();
     this.players = playerNames.map((name, index) => {
+    this.gameState = new GameState(); //tweaked AI handling to better suit new code
       if (name === "AI") {
-        return new AIPlayer([], 0, index === 0);
-      } else {
+        return new AIPlayerModel(this.gameState, [], 0, index === 0);
+      } 
+      else {
         return new Player([], 0, index === 0);
       }
     }); // Player 1 starts with isTurn = true
-    this.gameState = new GameState();
     this.roundManager = new RoundManager(this.trumpCard.suit);
     this.currentTurnIndex = 0;
 
@@ -46,11 +47,11 @@ class GameManager {
   // Play a card
   /**
    * Handles a player's attempt to play a card
-   *
+   * 
    * This method manages both human and AI player turns, with special handling for AI players:
    * - For human players: Validates the move and immediately plays the provided card
    * - For AI players: Triggers an asynchronous AI decision process with built-in safeguards
-   *
+   * 
    * @param {number} playerIndex - Index of the player attempting to play
    * @param {Card} card - Card to play (required for human players, ignored for AI)
    * @throws {Error} If it's not the player's turn or a human provides no card
@@ -69,7 +70,7 @@ class GameManager {
         //ai is already thinking, not calling again
         return;
       }
-
+      
       // ASYNC TURN HANDLING: Process AI turns asynchronously to prevent blocking the game loop
       // This allows the game to remain responsive during AI "thinking time"
       setTimeout(async () => {
@@ -77,16 +78,16 @@ class GameManager {
           // SAFEGUARD 2: Track the original player to ensure turn hasn't changed
           // This prevents the AI from playing out of turn if game state changed during thinking
           const playerBeforeCard = playerIndex;
-
+          
           // Request a card selection from the AI player
           const aiCard = await player.handleTurn(this.gameState);
-
+          
           // SAFEGUARD 3: Verify turn hasn't changed during AI thinking
           // This prevents turn desynchronization issues
           if (this.currentTurnIndex !== playerBeforeCard) {
             return;
           }
-
+          
           // SAFEGUARD 4: Verify AI returned a valid card
           // This prevents errors when playing null or undefined cards
           if (!aiCard) {
@@ -97,8 +98,7 @@ class GameManager {
           this.switchTurn();
 
           if (
-            Object.keys(this.roundManager.playedCards).length ===
-            this.players.length
+            Object.keys(this.roundManager.playedCards).length === this.players.length
           ) {
             const roundWinner = this.roundManager.determineWinner();
 
@@ -124,8 +124,7 @@ class GameManager {
       this.switchTurn();
 
       if (
-        Object.keys(this.roundManager.playedCards).length ===
-        this.players.length
+        Object.keys(this.roundManager.playedCards).length === this.players.length
       ) {
         const roundWinner = this.roundManager.determineWinner();
         console.log(`Round Winner: ${roundWinner}`);

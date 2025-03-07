@@ -1,7 +1,9 @@
-const Player = require('./Player');
+const GameState = require("../GameState");// merged from BriscaAIold.js
+const Player = require("../Player");// replaced with BriscaAIold.js
+const Card = require("../Card");// merged from BriscaAIold.js
 
 /**
- * AIPlayer Class - Represents an AI opponent in the card game
+ * AIPlayerModel Class - Represents an AI opponent in the card game
  * 
  * This class extends the basic Player class to add AI-specific functionality,
  * including simulated thinking time, automatic card selection, and
@@ -11,7 +13,7 @@ const Player = require('./Player');
  * The AI currently uses a simple strategy (playing the first card in hand),
  * but this can be enhanced with more sophisticated algorithms in the future.
  */
-class AIPlayer extends Player {
+class AIPlayerModel extends Player {
     /**
      * Creates a new AI player instance
      * 
@@ -19,11 +21,12 @@ class AIPlayer extends Player {
      * @param {number} score - Initial score for the AI
      * @param {boolean} isTurn - Whether it's the AI's turn to play
      */
-    constructor(hand = [], score = 0, isTurn = false) {
+    constructor(gameState, hand = [], score = 0, isTurn = false) { // merged gameState requirement from BiscaAIold.js
         super(hand, score, isTurn);
         this.isAI = true;
         this.thinkingTime = 1000; // Simulated thinking time in milliseconds
         this.isThinking = false;  // Flag to prevent multiple concurrent AI turns
+        this.gameState = gameState;  // merged from BriscaAIold.js
     }
 
     /**
@@ -39,8 +42,13 @@ class AIPlayer extends Player {
      * @returns {Promise<Card>} A promise that resolves to the card the AI decides to play
      * @throws {Error} If the AI cannot play a card or is called out of turn
      */
-    async handleTurn(gameState) {
+    async handleTurn() {  // removed because BriscaAIold.js has a better implementation to provide gameState class
         // Validate that it's actually this AI's turn to play
+        const currentPlayerTurn = this.gameState.GetTurn(); // merged from BriscaAIold.js
+        if (currentPlayerTurn === null) { // merged from BriscaAIold.js
+            console.warn("AI cannot analyze GameState: No active turn.");
+            return;
+        }
         if (!this.isTurn) {
             console.log("Warning: AI called to play when it's not its turn");
             return Promise.reject(new Error("Not AI's turn"));
@@ -54,7 +62,7 @@ class AIPlayer extends Player {
 
         // Mark the AI as in the thinking process
         this.isThinking = true;
-        console.log("AI is thinking...");
+        console.log("AI is thinking..."); //analogous to console.log("AI analyzing game state..."); keeping AIPlayerold's output
 
         // Create a promise for AI thinking with both timeout and normal resolution paths
         return new Promise((resolve, reject) => {
@@ -82,6 +90,13 @@ class AIPlayer extends Player {
                         clearTimeout(timeoutId); // Clear the safety timeout since normal logic succeeded
                         this.isThinking = false;
                         
+                        const trumpSuit = this.gameState.GetTrumpSuit();// merged from BriscaAIold.js
+                        const playerIndex = currentPlayerTurn === "1" ? 0 : 1;// merged from BriscaAIold.js
+                        const aiHand = this.gameState.GetPlayerHand(playerIndex);// merged from BriscaAIold.js
+                
+                        console.log(`Turn: Player ${currentPlayerTurn}`);// merged from BriscaAIold.js
+                        console.log(`Trump Suit: ${trumpSuit}`);// merged from BriscaAIold.js
+                        console.log("AI Hand:", aiHand.map(card => `${card.rank} of ${card.suit} (${card.points} points)`));// merged from BriscaAIold.js
                         // CARD SELECTION LOGIC
                         // For now, just play the first card in hand (basic strategy)
                         // TODO: Implement more sophisticated card selection algorithm based on gameState
@@ -151,4 +166,4 @@ class AIPlayer extends Player {
     }
 }
 
-module.exports = AIPlayer; 
+module.exports = AIPlayerModel; 
