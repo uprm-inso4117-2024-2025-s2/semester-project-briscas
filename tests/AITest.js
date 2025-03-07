@@ -1,13 +1,13 @@
 const GameState = require("../models/GameState");
 const Player = require("../models/Player");
-const BriscaAI = require("../models/ai/BriscaAI");
+const AIPlayerModel = require("../models/ai/AIPlayerModel"); //const BriscaAI = require("../models/ai/BriscaAI"); renamed
 const Card = require("../models/Card");
 
 console.log("=== AI TEST: GAMESTATE INTEGRATION ===\n");
 
 // Setup GameState
 const gameState = new GameState();
-const aiPlayer = new Player([new Card("Oros", "7"), new Card("Espadas", "3")], 0, true);
+const aiPlayer = new AIPlayerModel(gameState, [new Card("Oros", "7"), new Card("Espadas", "3")], 0, true); // newly implemented AIPlayerModel replacing the dummy player class, which is directly given the gameState
 const humanPlayer = new Player([new Card("Copas", "1"), new Card("Bastos", "5")], 0, false);
 
 // Assign hands to GameState
@@ -16,9 +16,8 @@ gameState.ChangeTurn("1"); // AI starts (Player 1)
 gameState.ChangeTrumpSuit("Oros"); // Set Trump Suit
 
 // Initialize AI
-const ai = new BriscaAI(gameState);
-ai.analyzeGameState(); // Expected output: AI retrieves correct game data
-
+//const ai = new AIPlayerModel(gameState); deprecated
+//ai.handleTurn();  // Expected output: AI retrieves correct game data
 // AI Plays a Move
 const aiHand = gameState.GetPlayerHand(0); // AI's hand from GameState
 const aiCard = aiHand.pop(); // AI plays the first available card

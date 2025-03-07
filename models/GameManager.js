@@ -2,7 +2,7 @@ const Deck = require("./Deck");
 const Player = require("./Player");
 const GameState = require("./GameState");
 const RoundManager = require("./Winner");
-const AIPlayer = require("./AIPlayer");
+const AIPlayerModel = require("../models/ai/AIPlayerModel"); //const AIPlayer = require("./AIPlayer"); Renamed
 
 class GameManager {
   constructor(playerNames) {
@@ -10,14 +10,14 @@ class GameManager {
     this.deck.shuffle();
     this.trumpCard = this.deck.setupTrumpSuit();
     this.players = playerNames.map((name, index) => {
+    this.gameState = new GameState(); //tweaked AI handling to better suit new code
       if (name === "AI") {
-        return new AIPlayer([], 0, index === 0);
+        return new AIPlayerModel(this.gameState, [], 0, index === 0);
       } 
       else {
         return new Player([], 0, index === 0);
       }
     }); // Player 1 starts with isTurn = true
-    this.gameState = new GameState();
     this.roundManager = new RoundManager(this.trumpCard.suit);
     this.currentTurnIndex = 0;
 
