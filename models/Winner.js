@@ -50,7 +50,19 @@ class RoundManager {
       scores: this.scores,
     };
   }
+  GameWinner(){
+    if(this.scores["player1"] == this.scores["player2"]){
+        return "tie";
+    }
+    if(this.scores["player1"] > this.scores["player2"])
+        return "player1";
+    else{
+        return "player2";
+    };
+  };
 }
+
+
 
 // Export the RoundManager class for use in the game
 module.exports = RoundManager;
