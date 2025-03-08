@@ -5,50 +5,65 @@ body {
 #backgroundimg {
     position: absolute;
     top: 0px;
-    left: 280px;
-    width: 1300px;
-    height: 730px;
+    left: 265px;
+    width: 1655px;
+    height: 919px;
     opacity: 15%;
     overflow: hidden;
 }
 
 #briscasColimg {
     position: absolute;
-    top: 200px;
-    left: -250px;
-    width: 740px;
+    top: 240px;
+    left: -340px;
+    width: 970px;
     transform: rotate(-90deg); /* Rotates the div 45 degrees */
 }
 
-#buttons1 {
+#upperButtons {
     position: absolute;
     background-color: none;
+    top: 0px;
+    left: 25px;
+    width: 200px;
+}
+
+#lowerButtons {
+    position: absolute;
+    background-color: none;
+    top: 630px;
+    left: 25px;
+    width: 200px;
+}
+
+.ButtonsContainer {
+    position: absolute;
     top: 25px;
-    left: 40px;
+    left: 45px;
     width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
 }
 
-#buttons2 {
-    position: absolute;
-    background-color: none;
-    top: 520px;
-    left: 40px;
-    width: 200px;
-}
-
-.buttonPadding {
-    margin: 20px;
-    padding: 10px;
+.buttons {
+    width: 185px;
+    height: 60px;
+    margin: 10px;
+    padding: 26px;
     border-radius: 50px;
+    font-size: 21px;
+    font-weight: bold;
+    color: #11524C;
     background-color: white;
     display: flex;
-    align-content: center;
+    align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
-.text {
-    font-weight: bold;
-    font-size: 20px;
-    color: #11524C;
+/*Removes the underline in wording*/
+a {
     text-decoration: none;
 }
+
