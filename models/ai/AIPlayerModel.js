@@ -162,6 +162,22 @@ class AIPlayerModel extends Player {
      */
     playCard(card) {
         this.isThinking = false; // Reset thinking state when a card is played
+        // Checks if the card is in the AI's hand
+        if(!this.hand.includes(card)){
+            throw new Error("Card is not in players hand.")
+        }
+        // Doesn't allow more than one card to be played
+        if (arguments.length > 1) {
+            throw new Error("You cant play more than one card at a time.");
+        }
+        // Checks if the input card is a valid card
+        if (!card || !(card instanceof Card)) {
+            throw new Error("Invalid card played.");
+        }
+        // Remove the card from the AI's hand
+        this.hand = this.hand.filter(c => c.rank !== card.rank || c.suit !== card.suit);
+        this.canDraw = true; 
+
         return super.playCard(card);
     }
 }
