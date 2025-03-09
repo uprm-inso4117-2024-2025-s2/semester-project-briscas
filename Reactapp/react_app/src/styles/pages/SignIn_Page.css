@@ -70,52 +70,73 @@
     border-radius: 5px;
 }
 
-.signin-button {
-    width: 100%;
-    height: 40px;
-    font-size: 16px;
-    background: #005f3f;
-    color: white;
-    border: none;
+.phone-number-field {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the dropdown and input */
+    border: 1px solid #ccc;
     border-radius: 5px;
-    cursor: pointer;
+    padding: 5px;
+    background-color: white;
+}
+
+.country-code-select {
+    width: 21%; /* Adjust width as needed */
+    height: 40px;
+    font-size: 14px;
+    padding: 5px;
+    border: none; /* Remove border */
+    background-color: transparent;
+    outline: none; /* Remove outline */
+    appearance: none; /* Remove default arrow in some browsers */
+    -webkit-appearance: none; /* Remove default arrow in Safari */
+    -moz-appearance: none; /* Remove default arrow in Firefox */
+}
+
+.phone-number-field input {
+    width: 70%; /* Adjust width as needed */
+    height: 40px;
+    font-size: 14px;
+    padding: 10px 10px 10px 0; /* Removed left padding */
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.button-login-container {
+    display: flex;
+    align-items: center; /* Vertically center items */
+    gap: 10px; /* Space between the button and the login text */
     margin-top: 10px;
 }
 
-.signin-button:hover {
-    background: #00432d;
-}
-
-.divider {
-    text-align: center;
-    font-size: 14px;
-    color: #555;
-    margin: 10px 0;
-}
-
-.google-signin-button {
-    width: 100%;
+.signin-button {
+    width: 120px; /* Smaller width for the button */
     height: 40px;
-    font-size: 14px;
-    background: rgb(227, 227, 227);
-    color: rgb(30,30,30);
-    border: 1px solid rgb(30,30,30);
-    border-radius: 5px;
+    font-size: 16px;
+    background: #005f3f; /* Green background */
+    color: white; /* White text */
+    border: none;
+    border-radius: 20px; /* Rounded corners */
     cursor: pointer;
+    font-weight: bold; /* Bold text */
+    text-align: center; /* Center text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.google-signin-button:hover {
-    background: rgb(200, 200, 200);
+.signin-button:hover {
+    background: #00432d; /* Darker green on hover */
 }
 
 .login-option {
     font-size: 14px;
-    text-align: center;
-    margin-top: 10px;
+    color: #555; /* Dark gray text */
 }
 
 .login-option a {
-    color: #005f3f;
+    color: #005f3f; /* Green link color */
     text-decoration: none;
     font-weight: bold;
     cursor: pointer;
