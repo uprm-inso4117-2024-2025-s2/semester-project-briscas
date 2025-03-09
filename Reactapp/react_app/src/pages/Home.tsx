@@ -2,13 +2,19 @@ import "../styles/pages/Home_Page.css"
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 
+
 const Home = () => {
   return (
     <div className="homepage">
       <div className="homepage-content">
         <Navbar/>
-        <h1>Briscas</h1>
-        <Link to="/GameBoard"><button className="start-button">Start Game</button></Link>
+
+        <p className="briscas-title">Briscas</p>
+          <select className="select-players-button">
+            <option value="" hidden>Select Players</option>
+            <option value="1">1 Player</option>
+          </select>
+        <Link to="/GameBoard"><button className="play-button">&#9658; Play</button></Link>
       </div>
     </div>
   );

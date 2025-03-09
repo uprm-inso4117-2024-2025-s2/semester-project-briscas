@@ -8,8 +8,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile'
-import Register from './pages/Register'
-import SignIn from './pages/SignIn'
+import RegisterPage from './pages/RegisterPage'
+import SignInPage from './pages/SignInPage';
 import HelpRules from './pages/HelpRules'
 import GameBoard from './pages/GameBoard';
 
@@ -34,19 +34,19 @@ const router = createBrowserRouter([
   //   path: '/HelpRules',
   //   element: <HelpRules/>
   // },
-  // {
-  //   path: '/Profile',
-  //   element: <Profile/>
-  // },
-  // {
-  //   path: '/Register',
-  //   element: <Register/>
-  // },
+  {
+   path: '/Profile',
+   element: <Profile/>
+  },
+  {
+    path: '/Register',
+    element: <RegisterPage/>
+  },
   
-  // {
-  //   path: '/SignIn',
-  //   element: <SignIn/>
-  // }
+  {
+    path: '/SignIn',
+    element: <SignInPage/>
+  }
 
   
 ]);
