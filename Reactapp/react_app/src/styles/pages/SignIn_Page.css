@@ -73,7 +73,7 @@
 .phone-number-field {
     display: flex;
     align-items: center;
-    gap: 10px; /* Space between the dropdown and input */
+    gap: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px;
@@ -81,23 +81,23 @@
 }
 
 .country-code-select {
-    width: 21%; /* Adjust width as needed */
+    width: 30%;
     height: 40px;
     font-size: 14px;
     padding: 5px;
-    border: none; /* Remove border */
+    border: none;
     background-color: transparent;
-    outline: none; /* Remove outline */
-    appearance: none; /* Remove default arrow in some browsers */
-    -webkit-appearance: none; /* Remove default arrow in Safari */
-    -moz-appearance: none; /* Remove default arrow in Firefox */
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 .phone-number-field input {
-    width: 70%; /* Adjust width as needed */
+    width: 70%;
     height: 40px;
     font-size: 14px;
-    padding: 10px 10px 10px 0; /* Removed left padding */
+    padding: 10px 10px 10px 0;
     border: none;
     outline: none;
     background-color: transparent;
@@ -105,38 +105,43 @@
 
 .button-login-container {
     display: flex;
-    align-items: center; /* Vertically center items */
-    gap: 10px; /* Space between the button and the login text */
+    align-items: center;
+    gap: 10px;
     margin-top: 10px;
 }
 
 .signin-button {
-    width: 120px; /* Smaller width for the button */
+    width: 120px;
     height: 40px;
     font-size: 16px;
-    background: #005f3f; /* Green background */
-    color: white; /* White text */
+    background: #005f3f;
+    color: white;
     border: none;
-    border-radius: 20px; /* Rounded corners */
+    border-radius: 20px;
     cursor: pointer;
-    font-weight: bold; /* Bold text */
-    text-align: center; /* Center text */
+    font-weight: bold;
+    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background 0.3s ease; /* Smooth transition for hover effect */
 }
 
 .signin-button:hover {
     background: #00432d; /* Darker green on hover */
 }
 
+.signin-button:active {
+    background: #003320; /* Even darker green on click */
+}
+
 .login-option {
     font-size: 14px;
-    color: #555; /* Dark gray text */
+    color: #555;
 }
 
 .login-option a {
-    color: #005f3f; /* Green link color */
+    color: #005f3f;
     text-decoration: none;
     font-weight: bold;
     cursor: pointer;
@@ -144,4 +149,12 @@
 
 .login-option a:hover {
     text-decoration: underline;
+}
+
+.error-message {
+    color: #ff0000; /* Red color for error messages */
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
 }
