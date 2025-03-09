@@ -1,6 +1,6 @@
 import "../styles/pages/GameBoard.css"
 import backgroundImg from "../assets/briscas3.jpg";
-import briscasColimg from "../assets/briscas.jpg";
+import briscasColimg from "/assets/briscas.jpg";
 import { Link } from "react-router-dom";
 
 const GameBoard = () => {
