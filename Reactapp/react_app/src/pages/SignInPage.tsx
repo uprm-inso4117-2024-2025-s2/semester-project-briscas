@@ -85,7 +85,7 @@ const SignInPage = () => {
               Sign Up
             </button>
             <div className="login-option">
-              Already have an account? <Link to="/login">Log in</Link>
+              Already have an account? <Link to="/register">Log in</Link>
             </div>
           </div>
         </form>
