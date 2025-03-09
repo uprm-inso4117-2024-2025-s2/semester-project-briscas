@@ -16,7 +16,7 @@ const Navbar = () => {
       <div className="logo">LOGO</div>
       <div className="nav-menu">
         <Link to="/" className="nav-item">Home</Link>
-        <Link to="/play" className="nav-item">Play</Link>
+        <Link to="/GameBoard" className="nav-item">Play</Link>
         <Link to="/help" className="nav-item">Help/Rules</Link>
         <Link to="/profile" className="nav-item">Profile</Link>
         <Link to="/settings" className="nav-item">Settings</Link>
