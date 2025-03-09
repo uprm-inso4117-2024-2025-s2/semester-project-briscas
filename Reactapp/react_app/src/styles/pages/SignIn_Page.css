@@ -38,16 +38,21 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 15px;
+    gap: 8px; /* Reduced gap between fields */
 }
 
 .name-fields {
     display: flex;
-    gap: 30px;
+    gap: 30px; /* Reduced gap between first and last name fields */
+    width: 100%; /* Ensure it takes full width */
+}
+
+.name-fields > div {
+    flex: 1; /* Make both first and last name fields equal width */
 }
 
 .name-fields input {
-    width: 100%;
+    width: 100%; /* Full width within the container */
     height: 40px;
     font-size: 14px;
     padding: 10px;
@@ -62,7 +67,7 @@
 }
 
 .signin-form input {
-    width: 100%;
+    width: 100%; /* Full width within the form */
     height: 40px;
     font-size: 14px;
     padding: 10px;
@@ -78,10 +83,11 @@
     border-radius: 5px;
     padding: 5px;
     background-color: white;
+    width: 100%; /* Full width within the form */
 }
 
 .country-code-select {
-    width: 30%;
+    width: 30%; /* Adjust width as needed */
     height: 40px;
     font-size: 14px;
     padding: 5px;
@@ -94,7 +100,7 @@
 }
 
 .phone-number-field input {
-    width: 70%;
+    width: 90%; /* Adjust width as needed */
     height: 40px;
     font-size: 14px;
     padding: 10px 10px 10px 0;
@@ -108,6 +114,7 @@
     align-items: center;
     gap: 10px;
     margin-top: 10px;
+    width: 100%; /* Full width within the form */
 }
 
 .signin-button {
@@ -124,15 +131,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.3s ease; /* Smooth transition for hover effect */
+    transition: background 0.3s ease;
 }
 
 .signin-button:hover {
-    background: #00432d; /* Darker green on hover */
+    background: #00432d;
 }
 
 .signin-button:active {
-    background: #003320; /* Even darker green on click */
+    background: #003320;
 }
 
 .login-option {
@@ -152,7 +159,7 @@
 }
 
 .error-message {
-    color: #ff0000; /* Red color for error messages */
+    color: #ff0000;
     font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
