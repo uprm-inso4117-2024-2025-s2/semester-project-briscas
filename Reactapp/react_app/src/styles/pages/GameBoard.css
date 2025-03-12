@@ -67,3 +67,48 @@ a {
     text-decoration: none;
 }
 
+
+.game-board {
+    position: absolute;
+    top: 100px;
+    left: 600px;
+    width: 700px;
+    height: 500px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    justify-items: center;
+}
+
+.card {
+    width: 100px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Draw and Discard Piles */
+.draw-pile {
+    position: absolute;
+    left: 450px;
+    top: 200px;
+}
+
+.discard-pile {
+    position: absolute;
+    left: 300px;
+    top: 200px;
+}
+
+/* Ensure card images fit inside the card div */
+.card img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
