@@ -27,7 +27,7 @@ const Navbar = () => {
         <Link to="/settings" className="nav-item">Settings</Link>
         {!isLoggedIn ? (
           <>
-            <Link to="/signin" className="nav-item button-border">Sign In</Link>
+            <Link to="/signin" className="nav-item button-border">Sign Up</Link>
             <Link to="/register" className="nav-item button-border">Log In</Link>
           </>
         ) : (

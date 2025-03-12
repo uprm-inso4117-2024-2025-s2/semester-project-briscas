@@ -24,12 +24,13 @@
     max-width: 400px;
     width: 100%;
     margin-left: 600px;
-    margin-top: 100px;
+    margin-top: 58px;
 }
 
 .signin-title {
     font-size: 24px;
     font-weight: bold;
+    font-family: Arial, sans-serif;
     color: rgb(30, 30, 30);
     margin-bottom: 20px;
 }
@@ -59,6 +60,7 @@
     font-size: 14px;
     font-weight: bold;
     color: rgb(30,30,30);
+    font-family: Arial, sans-serif;
 }
 
 .signin-form input {
@@ -91,6 +93,7 @@
     font-size: 14px;
     color: #555;
     margin: 10px 0;
+    
 }
 
 .google-signin-button {

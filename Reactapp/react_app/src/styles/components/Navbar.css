@@ -41,7 +41,7 @@
   /* Navigation items (links and buttons) */
   .nav-item {
     text-decoration: none;
-    color: #1E8A0D;
+    color: #1B5C56;
     font-size: 16px;
     font-weight: bold;
     padding: 8px 12px;
@@ -59,7 +59,7 @@
   
   /* Sign In & Register buttons with border */
   .button-border {
-    border: 2px solid #1E8A0D;
+    border: 2px solid #1B5C56;
     border-radius: 5px;
     padding: 8px 12px;
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -67,9 +67,9 @@
   
   /* Hover effect for bordered buttons  1E8A0D;*/
   .button-border:hover {
-    background-color: #1E8A0D;
+    background-color: #1B5C56;
     color: white;
-    border-color: #166c0a;
+    border-color: #1B5C56;
   }
 
   .page-content {

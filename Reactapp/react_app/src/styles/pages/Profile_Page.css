@@ -48,7 +48,7 @@
   .profile-icon {
     width: 100px;
     height: 100px;
-    background-color:  rgb(17,82,76);
+    background-color:  rgb(27, 92, 86);
     border-radius: 50%;
     color: #fff;
     display: flex;
@@ -61,7 +61,7 @@
   
   /* edit profile button */
   .edit-profile-button {
-    background-color: rgb(17,82,76);
+    background-color: rgb(27, 92, 86);
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -82,7 +82,8 @@
   /* labels above each input */
   .profile-form label {
     font-weight: bold;
-    color:  rgb(17,82,76);
+    font-family: Arial, sans-serif;
+    color:  rgb(27, 92, 86);
     text-transform: uppercase; 
   }
   
@@ -91,7 +92,7 @@
     width: 280px;
     height: 35px;
     border-radius: 20px;
-    border: 2px solid  rgb(17,82,76);
+    border: 2px solid  rgb(27, 92, 86);
     padding-left: 15px;
     font-weight: bold;
     color:  rgb(17,82,76); /*text color*/
@@ -100,7 +101,7 @@
   
   /* update button */
   .update-button {
-    background-color: rgb(17,82,76);
+    background-color: rgb(27, 92, 86);
     color: #fff;
     border: none;
     padding: 10px 20px;

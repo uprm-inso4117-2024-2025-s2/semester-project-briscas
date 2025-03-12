@@ -30,6 +30,7 @@
 .register-title {
     font-size: 24px;
     font-weight: bold;
+    font-family: Arial, sans-serif;
     color: rgb(30, 30, 30);
     text-align: center;  /* Centers the text */
     width: 100%;  /* Ensures the full width is used */
@@ -46,6 +47,7 @@
 .register-form label {
     font-size: 14px;
     font-weight: bold;
+    font-family: Arial, sans-serif;
     color: rgb(30,30,30);
 }
 
@@ -85,6 +87,7 @@
     text-decoration: none;
     font-weight: bold;
     cursor: pointer;
+    
 }
 
 .login-option a:hover {
@@ -95,6 +98,7 @@
     font-size: 14px;
     text-align: center;
     margin-top: 10px;
+    font-family: Arial, sans-serif;
 }
 
 .signup-option a {

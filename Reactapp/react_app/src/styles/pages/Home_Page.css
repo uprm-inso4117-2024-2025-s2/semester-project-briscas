@@ -6,13 +6,13 @@
     display: flex;
     background: url('/assets/briscasHome.jpg') no-repeat center calc(50% + 45px);
     background-attachment: fixed;
-    background-size: cover;
+    background-size:  cover;
     background-repeat: no-repeat;
 
     align-items: center;
     justify-content: flex-start;
 
-    min-height: 100vh;  /* Ensures it covers the full screen */
+    min-height: 100vh;  
     width: 100%; 
     margin-left: -9px;
     position: fixed;
@@ -33,6 +33,7 @@
   .briscas-title{
     font-size: 100px;
     font-weight: bold;
+    font-family: Arial, sans-serif;
     margin-bottom: 0;
     color: rgb(30,30,30);
     
@@ -40,7 +41,7 @@
 
   .select-players-button {
       width: 193px;
-      height: 34px;
+      height: 38px;
       font-size: medium;
       padding: 10px 20px;
       background: rgb(227, 227, 227);
