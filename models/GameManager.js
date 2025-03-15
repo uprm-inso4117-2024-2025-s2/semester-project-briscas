@@ -12,7 +12,7 @@ class GameManager {
     this.players = playerNames.map((name, index) => {
     this.gameState = new GameState(); //tweaked AI handling to better suit new code
       if (name === "AI") {
-        return new AIPlayerModel(this.gameState, [], 0, index === 0);
+        return new AIPlayerModel([], 0, index === 0);
       } 
       else {
         return new Player([], 0, index === 0);

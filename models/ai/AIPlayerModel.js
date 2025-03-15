@@ -17,17 +17,15 @@ class AIPlayerModel extends Player {
     /**
      * Creates a new AI player instance
      * 
-     * @param {Object} gameState - The current game state
      * @param {Array} hand - Initial cards in the AI's hand
      * @param {number} score - Initial score for the AI
      * @param {boolean} isTurn - Whether it's the AI's turn to play
      */
-    constructor(gameState, hand = [], score = 0, isTurn = false) {
+    constructor(hand = [], score = 0, isTurn = false) {
         super(hand, score, isTurn);
         this.isAI = true;
         this.thinkingTime = 1000; // Simulated thinking time in milliseconds
         this.isThinking = false;  // Flag to prevent multiple concurrent AI turns
-        this.gameState = gameState;
     }
 
     /**
@@ -42,7 +40,7 @@ class AIPlayerModel extends Player {
      * @returns {Promise<Card>} A promise that resolves to the card the AI decides to play
      * @throws {Error} If the AI cannot play a card or is called out of turn
      */
-    async handleTurn() {
+    async handleTurn(gameState) {
         // Validate that it's actually this AI's turn to play
         const currentPlayerTurn = this.gameState.GetTurn();
         if (currentPlayerTurn === null) {

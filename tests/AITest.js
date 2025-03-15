@@ -7,7 +7,7 @@ console.log("=== AI TEST: GAMESTATE INTEGRATION ===\n");
 
 // Setup GameState
 const gameState = new GameState();
-const aiPlayer = new AIPlayerModel(gameState, [new Card("Oros", "7"), new Card("Espadas", "3")], 0, true); // newly implemented AIPlayerModel replacing the dummy player class, which is directly given the gameState
+const aiPlayer = new AIPlayerModel([new Card("Oros", "7"), new Card("Espadas", "3")], 0, true); // newly implemented AIPlayerModel replacing the dummy player class, which is directly given the gameState
 const humanPlayer = new Player([new Card("Copas", "1"), new Card("Bastos", "5")], 0, false);
 
 // Assign hands to GameState
@@ -34,6 +34,8 @@ gameState.ChangePlayerHands(aiHand, gameState.GetPlayerHand(1));
 
 // Turn Switch to Human
 gameState.ChangeTurn("2");
+aiPlayer.turnToggle();
+humanPlayer.turnToggle();
 console.log(`Turn switched to: Player ${gameState.GetTurn()}`);
 
 // Verify AI is no longer the current player
@@ -59,3 +61,11 @@ gameState.ChangeTurn("1");
 console.log(`Turn switched back to: Player ${gameState.GetTurn()}`);
 
 console.log("\n=== TEST COMPLETE: AI TURN HANDLING WORKS ===");
+
+console.log("\n---------------------------------------------")
+console.log("\n === AI TEST: SCORE HANDLING ===")
+console.log("AI Current Score is", aiPlayer.getScore())
+aiPlayer.setScore(200)
+console.log("AI Score set to 200, expected value is 200, real value is", aiPlayer.getScore())
+aiPlayer.addScore(20)
+console.log("20 added to AI,expected value is 220, real value is", aiPlayer.getScore())
