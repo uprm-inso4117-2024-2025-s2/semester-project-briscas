@@ -2,13 +2,15 @@ const GameState = require("../models/GameState");
 const Player = require("../models/Player");
 const AIPlayerModel = require("../models/ai/AIPlayerModel"); //const BriscaAI = require("../models/ai/BriscaAI"); renamed
 const Card = require("../models/Card");
+const RoundManager = require("../models/Winner");
 
 console.log("=== AI TEST: GAMESTATE INTEGRATION ===\n");
 
 // Setup GameState
 const gameState = new GameState();
 const aiPlayer = new AIPlayerModel([new Card("Oros", "7"), new Card("Espadas", "3")], 0, true); // newly implemented AIPlayerModel replacing the dummy player class, which is directly given the gameState
-const humanPlayer = new Player([new Card("Copas", "1"), new Card("Bastos", "5")], 0, false);
+const humanPlayer = new Player([new Card("Copas", "1"), new Card("Oros", "5")], 0, false);
+const roundManager = new RoundManager("Oros");
 
 // Assign hands to GameState
 gameState.ChangePlayerHands(aiPlayer.hand, humanPlayer.hand);
@@ -60,6 +62,14 @@ gameState.ChangePlayerHands(gameState.GetPlayerHand(0), humanHand);
 gameState.ChangeTurn("1");
 console.log(`Turn switched back to: Player ${gameState.GetTurn()}`);
 
+roundManager.playCard("player1", aiCard); // 10 points
+roundManager.playCard("player2", humanCard); // 0 points
+const result = roundManager.getRoundWinnerData();
+console.log(`\n🔹 ${"Test 1: Trump card wins (Player 2 should win)"}`);
+console.log(`Winner: ${result.winner}`);
+console.log(
+  `Scores: Player 1 = ${result.scores.player1}, Player 2 = ${result.scores.player2}\n`
+);
 console.log("\n=== TEST COMPLETE: AI TURN HANDLING WORKS ===");
 
 console.log("\n---------------------------------------------")

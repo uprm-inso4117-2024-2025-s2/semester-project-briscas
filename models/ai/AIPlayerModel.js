@@ -42,7 +42,7 @@ class AIPlayerModel extends Player {
      */
     async handleTurn(gameState) {
         // Validate that it's actually this AI's turn to play
-        const currentPlayerTurn = this.gameState.GetTurn();
+        const currentPlayerTurn = gameState.GetTurn();
         if (currentPlayerTurn === null) {
             console.warn("AI cannot analyze GameState: No active turn.");
             return;
@@ -85,9 +85,9 @@ class AIPlayerModel extends Player {
                         clearTimeout(timeoutId); // Clear the safety timeout as logic succeeded
                         this.isThinking = false;
                         
-                        const trumpSuit = this.gameState.GetTrumpSuit();
+                        const trumpSuit = gameState.GetTrumpSuit();
                         const playerIndex = currentPlayerTurn === "1" ? 0 : 1;
-                        const aiHand = this.gameState.GetPlayerHand(playerIndex);
+                        const aiHand = gameState.GetPlayerHand(playerIndex);
                         
                         console.log(`Turn: Player ${currentPlayerTurn}`);
                         console.log(`Trump Suit: ${trumpSuit}`);
