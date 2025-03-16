@@ -5,7 +5,7 @@ console.log('=== COMPREHENSIVE AI TURN TEST ===');
 // Test 1: Single AI player vs human player
 async function testSingleAIvsHuman() {
     console.log('\n----- Test 1: Single AI vs Human -----');
-    const gameManager = new GameManager(['AI', 'Human']);
+    const gameManager = new GameManager(['AI', 'Human'], "1", "Oros");
     gameManager.dealInitialHands();
 
     // Log initial state
@@ -31,7 +31,7 @@ async function testMultipleAI() {
     console.log('\n----- Test 2: Multiple AI Players -----');
     
     // Create a game with one AI player to see how it's properly initialized
-    const referenceGame = new GameManager(['AI']);
+    const referenceGame = new GameManager(['AI', null]);
     const referenceAI = referenceGame.players[0];
     
     // Now create our test game

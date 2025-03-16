@@ -24,7 +24,7 @@ class Player{
     }
 
     addScore(newScore){
-        this.score =+ newScore;
+        this.score = this.score + newScore;
         //Alternative to .setScore(), Adds the given amount to the score of the player.
     }
 
