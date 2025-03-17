@@ -1,5 +1,8 @@
 import "../styles/pages/Home_Page.css"
 import Navbar from "../components/Navbar";
+import { Link } from "react-router-dom";
+
+
 
 const Home = () => {
   return (
@@ -12,7 +15,7 @@ const Home = () => {
             <option value="" hidden>Select Players</option>
             <option value="1">1 Player</option>
           </select>
-        <button className="play-button">&#9658; Play</button>
+          <Link to="/play" className="play-button">&#9658; Play</Link>
       </div>
     </div>
   );
