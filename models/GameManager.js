@@ -20,7 +20,8 @@ class GameManager {
     }); // Player 1 starts with isTurn = true
     this.roundManager = new RoundManager(this.trumpCard.suit);
     this.currentTurnIndex = 0;
-    this.gameState.ChangePlayerHands(this.players[0].hand, this.players[1].hand);
+    // hand = [null, null, null];
+    // this.gameState.ChangePlayerHands(this.players[0].hand, this.players[1].hand, this.players[2].hand, this.players[3].hand);
     this.gameState.ChangeTurn(turnOrder);
     this.gameState.ChangeTrumpSuit(trumpSuit);
     this.gameState.ChangeDeck(new Deck)
@@ -43,7 +44,12 @@ class GameManager {
 
   switchTurn() {
     this.players[this.currentTurnIndex].isTurn = false; // End current player's turn
-    this.currentTurnIndex = (this.currentTurnIndex + 1) % this.players.length;
+    if(this.players.length > 4){
+      this.currentTurnIndex = (this.currentTurnIndex + 1) % 4; 
+    }
+    else{
+      this.currentTurnIndex = (this.currentTurnIndex + 1) % this.players.length;
+    }
     this.players[this.currentTurnIndex].isTurn = true; // Set next player's turn
   }
 

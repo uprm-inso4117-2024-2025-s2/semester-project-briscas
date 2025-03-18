@@ -1,7 +1,7 @@
 const GameManager = require("../models/GameManager");
 
 //initialize game for two players
-const game = new GameManager(["Alice", "Bob"]);
+const game = new GameManager(["Alice", "Bob", "P3"]);
 
 console.log("\n=== Initial Game Setup ===");
 //display trump suit
@@ -14,6 +14,11 @@ console.log(
 );
 console.log(
   `Player 2 Hand: ${game.players[1].hand
+    .map((card) => card.displayCard())
+    .join(", ")}`
+);
+console.log(
+  `Player 3 Hand: ${game.players[2].hand
     .map((card) => card.displayCard())
     .join(", ")}`
 );
@@ -32,6 +37,19 @@ console.log("\n=== Player 2 Plays a Card ===");
 const player2Card = game.players[1].hand[0];
 game.playCard(1, player2Card);
 console.log(`Player 2 played: ${player2Card.displayCard()}`);
+
+const player3Card = game.players[2].hand[0];
+game.playCard(2, player3Card);
+console.log(`Player 3 played: ${player3Card.displayCard()}`);
+
+
+console.log("\n=== Testing Switch Turn ===");
+// console.log("\n turn:", game.gameState.player_turn);
+// game.switchTurn();
+// console.log("\n turn:", game.gameState.player_turn);
+
+
+
 
 console.log("\n=== Testing Invalid Turn ===");
 try {
