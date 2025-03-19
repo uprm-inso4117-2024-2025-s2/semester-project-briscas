@@ -60,13 +60,13 @@ class VisualElements {
 }
 
 class Card {
-    constructor(suit, rank) {
-        this.suits = ["Oros", "Copas", "Espadas", "Bastos"];
-        this.ranks = {"1": 11, "2": 0, "3": 10, "4": 0, "5": 0, "6": 0, "7": 0, "10": 2, "11": 3, "12": 4};  // Card ranks along with their corresponding points.
+    constructor(suit, rank, id = `${suit}-${rank}-${Math.random().toString(36).substr(2, 9)}`) {
+        this.suits = ["Oros", "Copas", "Espadas", "Bastos","null"];
+        this.ranks = {"1": 11, "2": 0, "3": 10, "4": 0, "5": 0, "6": 0, "7": 0, "10": 2, "11": 3, "12": 4, "null":null};  // Card ranks along with their corresponding points.
         
         // If either the suit or the rank of the card are invalid, this shows a warning message indicating that the values are invalid and sets them to null.
         if (!this.suits.includes(suit) || !(rank in this.ranks)) {
-            console.warn(`Invalid input: ${rank} of ${suit}`);
+            // console.warn(`Invalid input: ${rank} of ${suit}`);
             suit = null;
             rank = null;
         }
@@ -74,6 +74,14 @@ class Card {
         this.suit = suit;
         this.rank = rank;
         this.points = this.ranks[rank];
+        this.id = id;
+    }
+
+    updateCard(newSuit,newRank) {
+        this.suit = newSuit;
+        this.rank = newRank;
+        this.points = this.ranks[newRank];
+        this.id = `${newSuit}-${newRank}-${Math.random().toString(36).substr(2, 9)}`; 
     }
 
     // Returns a card with its rank, suit, and points. 
