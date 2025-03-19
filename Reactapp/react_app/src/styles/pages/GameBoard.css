@@ -121,17 +121,6 @@ a {
     top: 300px;
 }
 
-/* .discard-pile img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
-.discard-pile img.top-card {
-    z-index: 2;
-} */
-
 .trump-card {
     position: absolute;
     left: -100px;
@@ -182,16 +171,6 @@ a {
     transition: transform 0.5s ease-out;
 }
 
-/* .clickable-card {
-    transition: transform 0.3s ease-in-out;
-  } */
-
-
-/* .non-clickable-card.flipping {
-    transition: transform 0.4s ease-out;
-    animation: flipCard 0.5s forwards;
-} */
-
 .flipping {
     animation: flipCard 0.5s forwards;
     transform-style: preserve-3d;
@@ -212,9 +191,3 @@ a {
     border-radius: 8px;
 
 }
-
-
-/* @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-} */
