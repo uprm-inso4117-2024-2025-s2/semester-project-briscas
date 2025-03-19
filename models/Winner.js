@@ -39,7 +39,7 @@ class RoundManager {
         }
       }
       this.updateScore(winner);
-      this.resetRound();
+      //this.resetRound();
       return winner;
     }
     if(this.amount_players == 3){
@@ -60,7 +60,7 @@ class RoundManager {
         }
       }
       this.updateScore(winner);
-      this.resetRound();
+      //this.resetRound();
       return winner;
     }
     if (!player1 || !player2) {
@@ -77,7 +77,7 @@ class RoundManager {
     }
 
     this.updateScore(winner);
-    this.resetRound();
+    //this.resetRound();
     return winner;
   }
 
