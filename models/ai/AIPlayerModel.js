@@ -16,7 +16,7 @@ class AIPlayerModel extends Player {
      * @param {number} score - Initial score for the AI.
      * @param {boolean} isTurn - Whether it's the AI's turn to play.
      */
-    constructor(gameState, hand = [], score = 0, isTurn = false) {
+    constructor(hand = [], score = 0, isTurn = false) {
         super(hand, score, isTurn);
         this.isAI = true;
         this.thinkingTime = 1000; // in milliseconds
@@ -42,6 +42,7 @@ class AIPlayerModel extends Player {
      */
     async handleTurn() {
         const currentPlayerTurn = this.gameState.GetTurn();
+      
         if (currentPlayerTurn === null) {
             console.warn("AI cannot analyze GameState: No active turn.");
             return;
