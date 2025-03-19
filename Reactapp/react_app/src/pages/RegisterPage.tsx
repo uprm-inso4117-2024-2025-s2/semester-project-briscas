@@ -1,4 +1,6 @@
-import React, { useState } from "react"; // Import useState
+import React, { useState } from "react";
+import EyeIcon from "../assets/eye.png"; // Import your eye icon (PNG)
+import EyeSlashIcon from "../assets/eye-slash.png"; // Import your eye-slash icon (PNG)
 import "../styles/pages/Register_Page.css";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
@@ -30,9 +32,12 @@ const RegisterPage = () => {
               className="toggle-password-button"
               onClick={togglePasswordVisibility}
             >
-              <span role="img" aria-label="toggle-password">
-                {showPassword ? "👁️‍🗨️ Hide" : "👁️ Show"} {/* Eye symbol + text */}
-              </span>
+              <img
+                src={showPassword ? EyeSlashIcon : EyeIcon} // Toggle between icons
+                alt="toggle-password"
+                className="eye-icon"
+              />{" "}
+              {showPassword ? "Hide" : "Show"} {/* Icon + text */}
             </button>
           </div>
           <input
