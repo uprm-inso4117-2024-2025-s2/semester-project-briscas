@@ -15,9 +15,9 @@ class GameState {
     this.player_turn = null;
     this.deck = null;
     this.trump_suit = null;
-    this.played_cards = [null,null];
-    this.scores = [0,0];
-    this.player_hands = [null, null];
+    this.played_cards = [null,null, null, null];
+    this.scores = [0,0,0,0];
+    this.player_hands = [null, null, null, null];
     this.player_status = ["connected", "connected"];
     this.last_saved_state = null;
     this.current_action = {
@@ -97,7 +97,7 @@ class GameState {
     }
     ChangeTurn(turn) {
         // Validate the turn input
-        if (turn === "1" || turn === "2") {
+        if (turn === "1" || turn === "2" || turn == "3" || turn == "4") {
             this.player_turn = turn; // Only change if valid
         } else {
             console.error(`Invalid player turn: ${turn}`);
@@ -121,9 +121,11 @@ class GameState {
     GetPlayedCards(player){
         return this.played_cards[player];
     }
-    ChangePlayedCards(played_cards, played_cards_2){
+    ChangePlayedCards(played_cards, played_cards_2, played_cards_3, played_cards_4){
         this.played_cards[0] = played_cards;
         this.played_cards[1] = played_cards_2;
+        this.played_cards[2] = played_cards_3;
+        this.played_cards[3] = played_cards_4;
     }
 
     GetScores(player) {
@@ -133,7 +135,7 @@ class GameState {
         return this.scores;
     }
     ChangeScores(player, score) {
-        if (typeof player === 'number' && player >= 0 && player < 2) {
+        if (typeof player === 'number' && player >= 0 && player < 4) {
             this.scores[player] = parseInt(score) || 0;
         }
     }
@@ -141,9 +143,11 @@ class GameState {
     GetPlayerHand(player){
         return this.player_hands[player];
     }
-    ChangePlayerHands(hand, hand_2){
+    ChangePlayerHands(hand, hand_2, hand_3, hand_4){
         this.player_hands[0] = hand;
         this.player_hands[1] = hand_2;
+        this.player_hands[2] = hand_3;
+        this.player_hands[3] = hand_4;
     }
 
     ResetGame(){
@@ -155,9 +159,9 @@ class GameState {
         deck.shuffle();
         this.trump_suit = deck.setupTrumpSuit();
         this.deck = deck;
-        this.played_cards = [null,null];
-        this.scores = [0,0];
-        this.player_hands = [null, null];
+        this.played_cards = [null,null, null, null];
+        this.scores = [0,0,0,0];
+        this.player_hands = [null, null, null, null];
         this.player_status = ["connected", "connected"];
         this.last_saved_state = null;
         this.game_status = {
