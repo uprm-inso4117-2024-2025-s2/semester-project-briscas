@@ -27,13 +27,23 @@
     margin-top: 100px;
 }
 
+/* Profile picture circle */
+.profile-picture-circle {
+    width: 40px; /* Adjust size as needed */
+    height: 40px; /* Adjust size as needed */
+    background-color: gray; /* Gray color */
+    border-radius: 50%; /* Makes it a circle */
+    margin: 0 auto 0px; /* Centers the circle and adds space below */
+}
+
 .register-title {
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
     color: rgb(30, 30, 30);
     text-align: center;  /* Centers the text */
     width: 100%;  /* Ensures the full width is used */
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    font-family: Arial, Helvetica, sans-serif
 }
 
 .register-form {
@@ -41,12 +51,15 @@
     flex-direction: column;
     width: 100%;
     gap: 15px;
+    margin-bottom: 3px
 }
 
 .register-form label {
     font-size: 14px;
-    font-weight: bold;
+    /* font-weight: bold; */
     color: rgb(30,30,30);
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: -5px
 }
 
 .register-form input {
@@ -56,18 +69,49 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-top: -5px
+}
+
+/* Add these styles to your existing CSS */
+
+.password-label-container {
+  display: flex;
+  align-items: center; /* Align the label and button vertically */
+  justify-content: space-between; /* Space out the label and button */
+  margin-bottom: 5px; /* Add spacing below the container */
+}
+
+.password-label-container label {
+  margin: 0; /* Remove default margin */
+}
+
+.toggle-password-button {
+  background: none;
+  border: none;
+  color: #005f3f; /* Match your theme color */
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0; /* Remove padding */
+  display: flex;
+  align-items: center; /* Align the eye symbol and text vertically */
+  gap: 5px; /* Add spacing between the eye symbol and text */
+}
+
+.toggle-password-button:hover {
+  text-decoration: underline;
 }
 
 .register-button {
     width: 100%;
     height: 40px;
-    font-size: 16px;
+    font-size: 18px;
     background: #005f3f;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 50px;
     cursor: pointer;
     margin-top: 10px;
+    font-family: Arial, Helvetica, sans-serif
 }
 
 .register-button:hover {
@@ -78,6 +122,7 @@
     font-size: 14px;
     text-align: center;
     margin-top: 10px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .login-option a {
@@ -94,7 +139,7 @@
 .signup-option {
     font-size: 14px;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 .signup-option a {
