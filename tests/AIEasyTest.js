@@ -1,84 +1,122 @@
-const GameState = require("../models/GameState");
-const Player = require("../models/Player");
-const BriscaAI = require("../models/ai/BriscaAI");
-const Card = require("../models/Card");
+const {expect} = require('chai');
+const AIEasy = require('../models/ai/AIEasy');
+const Card = require('../models/Card');
 
-console.log("=== AI TEST: EASY MODE INTEGRATION ===\n");
-
-// Setup GameState
-const gameState = new GameState();
-const aiPlayer = new Player(
-    [ new Card("Oros", "7"), new Card("Espadas", "3") ],
-    0,   // Score
-    true // Is AI
-);
-const humanPlayer = new Player(
-    [ new Card("Copas", "1"), new Card("Bastos", "5") ],
-    0,    // Score
-    false // Is Human
-);
-
-// Assign hands to GameState
-gameState.ChangePlayerHands(aiPlayer.hand, humanPlayer.hand);
-gameState.ChangeTurn("1");         // AI starts (Player 1)
-gameState.ChangeTrumpSuit("Oros"); // Set Trump Suit
-
-// Initialize AI
-const ai = new BriscaAI(gameState);
-ai.analyzeGameState(); // Just to confirm the AI can read the game state
-
-// --- AI Easy Mode Move ---
-console.log("\n--- AI Easy Mode Move ---");
-// Instead of popping from the array, we let the AI decide based on Easy Mode
-// logic
-const aiCard = ai.makeMove();
-
-// Safety check: if AI didn't return anything, we know something went wrong
-if (!aiCard) {
-  console.error("AI did not return a card. Test failed.");
-} else {
-  console.log(`AI plays: ${aiCard.rank} of ${aiCard.suit}`);
+// Minimal FakeGameState: Even though AIEasy ignores game state details,
+// we supply a simple object so that any global reference to gameState is
+// defined.
+class FakeGameState {
+  constructor(opponentPlayedCard = null) {
+    this.opponentPlayedCard = opponentPlayedCard;
+  }
 }
 
-// Update GameState with AI's played card
-gameState.ChangePlayedCards(aiCard, null);
+// Set a global gameState so that if AIPlayerModel references it, it is defined.
+global.gameState = new FakeGameState();
 
-// Verify AI's played card is stored in GameState
-const playedCards = gameState.GetPlayedCards(0);
-console.log(`GameState recorded AI's played card: ${playedCards.rank} of ${
-    playedCards.suit}`);
+describe('AIEasy Class', function() {
+  describe('Lowest Card Selection', function() {
+    it('should always select the lowest-value card from its hand', function() {
+      // In our Card implementation, assume "2" has 0 points, which is the
+      // lowest.
+      const hand = [
+        new Card("Copas", "1"),   // e.g., 11 points
+        new Card("Espadas", "2"), // e.g., 0 points -> expected lowest
+        new Card("Oros", "3")     // e.g., 10 points
+      ];
+      const fakeState = new FakeGameState();
+      const ai = new AIEasy(fakeState, hand);
+      const selected = ai.selectCard();
+      expect(selected.suit).to.equal("Espadas");
+      expect(selected.rank).to.equal("2");
+    });
 
-// Ensure AI's hand updates in GameState
-// (AI's new hand is already stored in GameState by the AI's `makeMove()` logic,
-//  but here we mimic your existing test structure)
-const updatedAIHand = gameState.GetPlayerHand(0);
-gameState.ChangePlayerHands(updatedAIHand, gameState.GetPlayerHand(1));
+    it('should throw an error when hand is empty', function() {
+      const fakeState = new FakeGameState();
+      const ai = new AIEasy(fakeState, []);
+      expect(() => ai.selectCard()).to.throw("No cards in hand");
+    });
 
-// Turn Switch to Human
-gameState.ChangeTurn("2");
-console.log(`Turn switched to: Player ${gameState.GetTurn()}`);
+    it('should ignore opponent actions and select based solely on its hand',
+       function() {
+         // Create two game states: one with an opponent card and one without.
+         const stateWithOpponent = new FakeGameState(new Card("Bastos", "1"));
+         const stateWithoutOpponent = new FakeGameState(null);
 
-// Verify AI is no longer the current player
-const currentPlayer = gameState.GetTurn();
-console.log(
-    `Current player should be human (2), actual: Player ${currentPlayer}`);
+         const hand = [
+           new Card("Oros", "11"),   // e.g., 3 points
+           new Card("Copas", "2"),   // e.g., 0 points -> expected lowest
+           new Card("Espadas", "12") // e.g., 4 points
+         ];
 
-// Human Plays a Move
-const humanHand = gameState.GetPlayerHand(1);
-const humanCard = humanHand.pop(); // Human selects a card to play
-console.log(`Human plays: ${humanCard.rank} of ${humanCard.suit}`);
-gameState.ChangePlayedCards(aiCard, humanCard);
+         const aiWithOpponent = new AIEasy(stateWithOpponent, hand.slice());
+         const aiWithoutOpponent =
+             new AIEasy(stateWithoutOpponent, hand.slice());
 
-// Verify Human's played card is stored in GameState
-const playedCardsHuman = gameState.GetPlayedCards(1);
-console.log(`GameState recorded Human's played card: ${
-    playedCardsHuman.rank} of ${playedCardsHuman.suit}`);
+         const selectedWithOpponent = aiWithOpponent.selectCard();
+         const selectedWithoutOpponent = aiWithoutOpponent.selectCard();
 
-// Ensure Human's hand updates in GameState
-gameState.ChangePlayerHands(gameState.GetPlayerHand(0), humanHand);
+         // Both should return the same lowest card.
+         expect(selectedWithOpponent.suit).to.equal("Copas");
+         expect(selectedWithOpponent.rank).to.equal("2");
+         expect(selectedWithoutOpponent.suit).to.equal("Copas");
+         expect(selectedWithoutOpponent.rank).to.equal("2");
+       });
+  });
 
-// Turn Switches Back to AI
-gameState.ChangeTurn("1");
-console.log(`Turn switched back to: Player ${gameState.GetTurn()}`);
+  describe('Stateless Decision Making', function() {
+    it('should not track previously played cards; repeated calls return the same card if hand is unchanged',
+       function() {
+         const hand = [
+           new Card("Bastos", "11"), // e.g., 3 points
+           new Card("Espadas", "3"), // e.g., 10 points
+           new Card("Oros", "2")     // e.g., 0 points -> expected lowest
+         ];
+         const fakeState = new FakeGameState();
+         const ai = new AIEasy(fakeState, hand.slice());
 
-console.log("\n=== TEST COMPLETE: AI EASY MODE TURN HANDLING WORKS ===");
+         const firstSelection = ai.selectCard();
+         const secondSelection = ai.selectCard();
+
+         // Repeated calls without modifying the hand should return the same
+         // card.
+         expect(firstSelection.suit).to.equal(secondSelection.suit);
+         expect(firstSelection.rank).to.equal(secondSelection.rank);
+       });
+
+    it('should extend rounds by playing the lowest card instead of winning aggressively',
+       function() {
+         // Even if a higher card might win the round, the AI should pick the
+         // lowest.
+         const hand = [
+           new Card("Copas", "1"), // e.g., 11 points (high, winning potential)
+           new Card("Espadas", "2"), // e.g., 0 points (lowest)
+           new Card("Bastos", "3")   // e.g., 10 points
+         ];
+         const fakeState = new FakeGameState();
+         const ai = new AIEasy(fakeState, hand);
+         const selected = ai.selectCard();
+         // The AI should choose the card with the lowest value: "Espadas" "2"
+         expect(selected.suit).to.equal("Espadas");
+         expect(selected.rank).to.equal("2");
+       });
+  });
+
+  describe('Valid Move Selection', function() {
+    it('should always select a card that exists in its hand', function() {
+      const hand = [
+        new Card("Oros", "3"),   // e.g., 10 points
+        new Card("Copas", "10"), // e.g., 2 points
+        new Card("Bastos", "12") // e.g., 4 points
+      ];
+      const fakeState = new FakeGameState();
+      const ai = new AIEasy(fakeState, hand);
+      const selected = ai.selectCard();
+
+      // Ensure the selected card is one of the cards in the hand.
+      const handIdentifiers = hand.map(card => `${card.suit}-${card.rank}`);
+      const selectedIdentifier = `${selected.suit}-${selected.rank}`;
+      expect(handIdentifiers).to.include(selectedIdentifier);
+    });
+  });
+});
