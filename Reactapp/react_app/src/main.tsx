@@ -11,7 +11,7 @@ import Profile from './pages/Profile'
 import RegisterPage from './pages/RegisterPage'
 import SignInPage from './pages/SignInPage';
 import HelpRules from './pages/HelpRules'
-import PlayPage from './pages/Play'
+import PlayPage from './pages/GameBoard'
 
 
 const router = createBrowserRouter([
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
     element: <SignInPage/>
   },
   {
-    path: '/Play',
+    path: '/GameBoard',
     element: <PlayPage/>
   }
 
