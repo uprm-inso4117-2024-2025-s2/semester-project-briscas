@@ -11,10 +11,7 @@ import Profile from './pages/Profile'
 import RegisterPage from './pages/RegisterPage'
 import SignInPage from './pages/SignInPage';
 import HelpRules from './pages/HelpRules'
-
 import GameBoard from './pages/GameBoard';
-
-
 
 
 const router = createBrowserRouter([
@@ -48,12 +45,7 @@ const router = createBrowserRouter([
   {
     path: '/SignIn',
     element: <SignInPage/>
-  },
-  {
-    path: '/GameBoard',
-    element: <PlayPage/>
   }
-
   
 ]);
 
