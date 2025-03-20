@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/pages/GameBoard.css";
 import backgroundImg from "../assets/briscas3.jpg";
@@ -345,3 +346,4 @@ const GameBoard = () => {
   };
   
   export default GameBoard;
+

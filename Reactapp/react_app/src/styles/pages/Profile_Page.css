@@ -2,6 +2,8 @@
 .profile-page {
     position: relative;
     min-height: 100vh;
+    overflow: hidden;
+    position: fixed;
   }
   
   /* background image container */
@@ -15,20 +17,23 @@
     background-size: cover;
     opacity: 0.4; /* 40% opacity*/
     z-index: -1;
+    position: fixed;
   }
   
   /* Main content area */
   .content {
     position: relative;
     z-index: 1;
+    
   }
   
   /* adjust position of profile fields */
   .profile-container {
     display: flex;
     align-items: flex-start;
-    padding-top: 225px; 
+    padding-top: 120px; 
     padding-left: 200px;
+    
   }
   
   /* column for user info */
@@ -36,13 +41,14 @@
     display: flex;
     flex-direction: column;
     align-items: center; 
+    
   }
   
   /* icon area */
   .profile-icon {
     width: 100px;
     height: 100px;
-    background-color:  rgb(17,82,76);
+    background-color:  rgb(27, 92, 86);
     border-radius: 50%;
     color: #fff;
     display: flex;
@@ -55,7 +61,7 @@
   
   /* edit profile button */
   .edit-profile-button {
-    background-color: rgb(17,82,76);
+    background-color: rgb(27, 92, 86);
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -76,7 +82,8 @@
   /* labels above each input */
   .profile-form label {
     font-weight: bold;
-    color:  rgb(17,82,76);
+    font-family: Arial, sans-serif;
+    color:  rgb(27, 92, 86);
     text-transform: uppercase; 
   }
   
@@ -85,7 +92,7 @@
     width: 280px;
     height: 35px;
     border-radius: 20px;
-    border: 2px solid  rgb(17,82,76);
+    border: 2px solid  rgb(27, 92, 86);
     padding-left: 15px;
     font-weight: bold;
     color:  rgb(17,82,76); /*text color*/
@@ -94,7 +101,7 @@
   
   /* update button */
   .update-button {
-    background-color: rgb(17,82,76);
+    background-color: rgb(27, 92, 86);
     color: #fff;
     border: none;
     padding: 10px 20px;

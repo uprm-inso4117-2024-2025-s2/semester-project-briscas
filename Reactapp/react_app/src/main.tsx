@@ -11,7 +11,9 @@ import Profile from './pages/Profile'
 import RegisterPage from './pages/RegisterPage'
 import SignInPage from './pages/SignInPage';
 import HelpRules from './pages/HelpRules'
+
 import GameBoard from './pages/GameBoard';
+
 
 
 
@@ -30,10 +32,10 @@ const router = createBrowserRouter([
     element: <GameBoard/>
   },
   
-  // {
-  //   path: '/HelpRules',
-  //   element: <HelpRules/>
-  // },
+  {
+    path: '/HelpRules',
+    element: <HelpRules/>
+  },
   {
    path: '/Profile',
    element: <Profile/>
@@ -46,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: '/SignIn',
     element: <SignInPage/>
+  },
+  {
+    path: '/GameBoard',
+    element: <PlayPage/>
   }
 
   

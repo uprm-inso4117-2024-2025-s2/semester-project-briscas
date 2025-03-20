@@ -1,4 +1,4 @@
-/* Navbar container */
+/* Navbar container*/
 .navbar {
     position: fixed;
     top: 0;
@@ -7,12 +7,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    backdrop-filter: blur(8px); /* Smooth blur effect */
     padding: 0px 0px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     font-family: Arial, sans-serif;
-    max-height: 15%;
+    max-height: 10%;
   }
   
   /* Logo styles */
@@ -20,7 +21,14 @@
     font-size: 22px;
     font-weight: bold;
     color: #1E8A0D;
-    margin-top: 100px;
+    margin-top: 50px;
+  }
+  .logoIMG {
+    height: 60px;  /* Adjust as needed */
+    width: auto; 
+    cursor: pointer;
+    margin-bottom: 50px;
+    margin-left: 10px;
   }
   
   /* Navigation menu */
@@ -33,7 +41,7 @@
   /* Navigation items (links and buttons) */
   .nav-item {
     text-decoration: none;
-    color: #1E8A0D;
+    color: #1B5C56;
     font-size: 16px;
     font-weight: bold;
     padding: 8px 12px;
@@ -45,24 +53,30 @@
   /* Hover effect */
   .nav-item:hover {
     background: rgba(30, 138, 13, 0.1);
-    border-radius: 5px;
-    color: #166c0a;
+    border-radius: 10px;
+    color: #062c03;
   }
   
   /* Sign In & Register buttons with border */
   .button-border {
-    border: 2px solid #1E8A0D;
+    border: 2px solid #1B5C56;
     border-radius: 5px;
     padding: 8px 12px;
     transition: background-color 0.3s ease, border-color 0.3s ease;
   }
   
-  /* Hover effect for bordered buttons */
+  /* Hover effect for bordered buttons  1E8A0D;*/
   .button-border:hover {
-    background-color: #1E8A0D;
+    background-color: #1B5C56;
     color: white;
-    border-color: #166c0a;
+    border-color: #1B5C56;
   }
+
+  .page-content {
+    margin-top: 60px;
+    padding: 20px;
+  }
+
   
   /* Responsive Design */
   @media (max-width: 768px) {
@@ -76,5 +90,4 @@
       right: 20px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-  }
-  
+  } 
