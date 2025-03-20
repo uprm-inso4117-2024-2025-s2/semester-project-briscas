@@ -2,25 +2,29 @@ const Deck = require("./Deck");
 const Player = require("./Player");
 const GameState = require("./GameState");
 const RoundManager = require("./Winner");
-const AIPlayer = require("./AIPlayer");
+const AIPlayerModel = require("../models/ai/AIPlayerModel"); //const AIPlayer = require("./AIPlayer"); Renamed
 
 class GameManager {
-  constructor(playerNames) {
+  constructor(playerNames, turnOrder,trumpSuit) {
     this.deck = new Deck();
     this.deck.shuffle();
     this.trumpCard = this.deck.setupTrumpSuit();
     this.players = playerNames.map((name, index) => {
+    this.gameState = new GameState(); //tweaked AI handling to better suit new code
       if (name === "AI") {
-        return new AIPlayer([], 0, index === 0);
+        return new AIPlayerModel([], 0, index === 0);
       } 
       else {
         return new Player([], 0, index === 0);
       }
     }); // Player 1 starts with isTurn = true
-    this.gameState = new GameState();
-    this.roundManager = new RoundManager(this.trumpCard.suit);
+    this.roundManager = new RoundManager(this.trumpCard.suit, this.getMapSize(this.players));
     this.currentTurnIndex = 0;
-
+    // hand = [null, null, null];
+    // this.gameState.ChangePlayerHands(this.players[0].hand, this.players[1].hand, this.players[2].hand, this.players[3].hand);
+    this.gameState.ChangeTurn(turnOrder);
+    this.gameState.ChangeTrumpSuit(trumpSuit);
+    this.gameState.ChangeDeck(new Deck)
     this.dealInitialHands();
   }
 
@@ -40,7 +44,26 @@ class GameManager {
 
   switchTurn() {
     this.players[this.currentTurnIndex].isTurn = false; // End current player's turn
-    this.currentTurnIndex = (this.currentTurnIndex + 1) % this.players.length;
+    if( this.getMapSize(this.players) > 4){
+      if(this.currentTurnIndex == 3){
+        this.currentTurnIndex = 0;
+      }
+      else{
+      this.currentTurnIndex = (this.currentTurnIndex + 1) % 4; }
+    }
+    else{
+      if(this.currentTurnIndex+1 == (this.getMapSize(this.players))){
+        // console.log("current turn = ", this.currentTurnIndex);
+        this.currentTurnIndex = 0;
+        // console.log("current turn = ", this.currentTurnIndex);
+
+      }
+      else{
+        // console.log("current turn = ", this.currentTurnIndex);
+        this.currentTurnIndex = (this.currentTurnIndex + 1);
+        // console.log("current turn = ", this.currentTurnIndex);
+        }
+    }
     this.players[this.currentTurnIndex].isTurn = true; // Set next player's turn
   }
 
@@ -98,7 +121,7 @@ class GameManager {
           this.switchTurn();
 
           if (
-            Object.keys(this.roundManager.playedCards).length === this.players.length
+            Object.keys(this.roundManager.playedCards).length === this.getMapSize(this.players)
           ) {
             const roundWinner = this.roundManager.determineWinner();
 
@@ -124,12 +147,12 @@ class GameManager {
       this.switchTurn();
 
       if (
-        Object.keys(this.roundManager.playedCards).length === this.players.length
+        Object.keys(this.roundManager.playedCards).length === this.getMapSize(this.players)
       ) {
         const roundWinner = this.roundManager.determineWinner();
         console.log(`Round Winner: ${roundWinner}`);
 
-        this.switchTurn(); // Winner starts next round
+        //this.switchTurn(); // Winner starts next round
       }
     }
   }
@@ -147,6 +170,14 @@ class GameManager {
     this.dealInitialHands();
     this.currentTurnIndex = 0;
     console.log("Game restarted!");
+  }
+   getMapSize(x) {
+    var len = 0;
+    for (var count in x) {
+            len++;
+    }
+  
+    return len;
   }
 }
 

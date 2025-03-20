@@ -5,7 +5,7 @@ console.log('=== COMPREHENSIVE AI TURN TEST ===');
 // Test 1: Single AI player vs human player
 async function testSingleAIvsHuman() {
     console.log('\n----- Test 1: Single AI vs Human -----');
-    const gameManager = new GameManager(['AI', 'Human']);
+    const gameManager = new GameManager(['AI', 'Human'], "1", "Oros");
     gameManager.dealInitialHands();
 
     // Log initial state
@@ -31,14 +31,14 @@ async function testMultipleAI() {
     console.log('\n----- Test 2: Multiple AI Players -----');
     
     // Create a game with one AI player to see how it's properly initialized
-    const referenceGame = new GameManager(['AI']);
+    const referenceGame = new GameManager(['AI', null]);
     const referenceAI = referenceGame.players[0];
     
     // Now create our test game
     const gameManager = new GameManager(['AI-1', 'AI-2', 'AI-3']);
     
     // Check if any player is not a proper AI and replace it with a proper one
-    const AIPlayer = require('../models/AIPlayer');
+    const AIPlayerModel = require("../models/ai/AIPlayerModel");//    const AIPlayer = require('../models/AIPlayer'); renamed
     for (let i = 0; i < gameManager.players.length; i++) {
         if (!gameManager.players[i].handleTurn) {
             console.log(`Replacing player ${i+1} with proper AIPlayer instance`);
@@ -46,7 +46,7 @@ async function testMultipleAI() {
             const hand = gameManager.players[i].hand;
             const score = gameManager.players[i].score;
             const isTurn = gameManager.players[i].isTurn;
-            gameManager.players[i] = new AIPlayer(hand, score, isTurn);
+            gameManager.players[i] = new AIPlayerModel(gameManager.gameState, hand, score, isTurn);
             gameManager.players[i].thinkingTime = 500; // Shorter thinking time for tests
         }
     }

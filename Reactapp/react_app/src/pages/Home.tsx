@@ -10,12 +10,15 @@ const Home = () => {
     <div className="homepage">
       <div className="homepage-content">
         <Navbar/>
+
         <p className="briscas-title">Briscas</p>
           <select className="select-players-button">
             <option value="" hidden>Select Players</option>
             <option value="1">1 Player</option>
           </select>
-          <Link to="/play" className="play-button">&#9658; Play</Link>
+
+        <Link to="/GameBoard"><button className="play-button">&#9658; Play</button></Link>
+
       </div>
     </div>
   );

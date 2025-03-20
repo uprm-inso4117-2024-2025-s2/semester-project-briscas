@@ -1,4 +1,4 @@
-const Player = require('./Player');
+const Player = require('../Player');
 
 /**
  * AIPlayer Class - Represents an AI opponent in the card game
