@@ -14,7 +14,6 @@ import HelpRules from './pages/HelpRules'
 import GameBoard from './pages/GameBoard';
 
 
-
 const router = createBrowserRouter([
   //add navbar to everypage to navagate back and forth
   {
@@ -30,10 +29,10 @@ const router = createBrowserRouter([
     element: <GameBoard/>
   },
   
-  // {
-  //   path: '/HelpRules',
-  //   element: <HelpRules/>
-  // },
+  {
+    path: '/HelpRules',
+    element: <HelpRules/>
+  },
   {
    path: '/Profile',
    element: <Profile/>
@@ -47,7 +46,6 @@ const router = createBrowserRouter([
     path: '/SignIn',
     element: <SignInPage/>
   }
-
   
 ]);
 

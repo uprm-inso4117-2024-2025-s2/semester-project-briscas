@@ -11,7 +11,6 @@ const Profile = () => {
         <div className="profile-container">
           <div className="profile-section">
             <div className="profile-icon">
-            {/*profile icon imported from Font Awesome*/}
               <i className="fa fa-user"></i>
             </div>
             <button className="edit-profile-button">EDIT PROFILE</button>
