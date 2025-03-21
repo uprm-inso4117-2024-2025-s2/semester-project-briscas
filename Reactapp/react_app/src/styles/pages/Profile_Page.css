@@ -111,4 +111,16 @@
     margin-top: 20px; 
     font-size: 1rem;
   }
+
+    /* Hover effect */
+  .edit-profile-button:hover, .update-button:hover {
+    transform: scale(1.05);
+  }
+
+  /* Clicked effect */
+  .clicked {
+    filter: brightness(0.8); /* Darkens the button */
+    transform: scale(0.95);
+    transition: all 0.1s ease-in-out;
+  }
   
