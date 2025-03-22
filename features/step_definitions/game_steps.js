@@ -178,3 +178,20 @@ Then('an error with message {string} should be thrown', function (expectedMessag
   assert.strictEqual(this.actionError.message, expectedMessage);
 });
 
+//Scenario: A trick is resolved based on the Brisca suit
+Given('Player A plays a 5 of cups and Player B plays a 7 of swords', function () {
+  this.player1 = new Player([new Card('cups', '5')], 0, true);
+  this.player2 = new Player([new Card('swords', '7')], 0, false);
+});
+
+When('The trump suit is cups', function () {
+  this.trumpSuit = 'cups';
+});
+
+Then('Player A should win the trick', function () {
+  const roundManager = new RoundManager(this.trumpSuit);
+  roundManager.playCard('player1', this.player1.hand[0]);
+  roundManager.playCard('player2', this.player2.hand[0]);
+  const winner = roundManager.determineWinner();
+  assert.strictEqual(winner, 'player1');
+});

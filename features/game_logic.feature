@@ -45,3 +45,9 @@ Feature: Game Logic for Single-Player Briscas
     When the player attempts to play a card with rank "1" and suit "Oros"
     Then an error with message "Card is not in players hand." should be thrown
 
+  # Scenario 9: A trick is resolved based on the Brisca suit
+  Scenario:
+    Given Player A plays a 5 of cups
+    And Player B plays a 7 of swords
+    When the trump suit is cups
+    Then Player A wins the trick
