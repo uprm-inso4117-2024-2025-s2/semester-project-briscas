@@ -17,8 +17,8 @@
       "projectedGroupGrade": 100.0
     },
     "milestone3": {
-      "startDate": "2025-03-24",
-      "endDate": "2025-04-30",
+      "startDate": "2025-03-24T08:00:00",
+      "endDate": "2025-04-30T23:59:00",
       "projectedGroupGrade": 100.0
     }
   },
