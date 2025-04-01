@@ -1,5 +1,5 @@
 console.log("Testing project...")
 
-# Insert hooks into existing tests below
+// Insert hooks into existing tests below
 
 console.log("Testing completed!")
