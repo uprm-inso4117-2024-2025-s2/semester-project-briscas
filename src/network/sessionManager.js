@@ -37,8 +37,11 @@ function joinSession(sessionId, socketId) {
 
 function getSession(sessionId) { return sessions[sessionId] || null; }
 
+function getAllSessions() { return sessions; }
+
 module.exports = {
   createSession,
   joinSession,
   getSession,
+  getAllSessions, // new export
 };
