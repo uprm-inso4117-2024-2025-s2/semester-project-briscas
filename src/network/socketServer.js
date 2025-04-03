@@ -1,5 +1,6 @@
 const { Server } = require("socket.io");
-const { createSession, joinSession, getSession } = require("./sessionManager");
+const { createSession, joinSession, getSession, removePlayerFromSession } = require("./sessionManager");
+const { validatePlayerAction, routePlayerAction } = require("./actionHandler");
 
 function initializeSocketServer(httpServer) {
   const io = new Server(httpServer, {
@@ -39,9 +40,23 @@ function initializeSocketServer(httpServer) {
       }
     });
 
+    socket.on("playerAction", (data) => {
+      const { sessionId, action } = data;
+      if (validatePlayerAction(sessionId, socket.id, action)) {
+        routePlayerAction(sessionId, socket.id, action);
+        console.log(`[ACTION] Valid action from ${socket.id} in session ${sessionId}`);
+      } else {
+        socket.emit("error", {
+          type: "INVALID_ACTION",
+          payload: { message: "Invalid or unauthorized action." },
+        });
+        console.warn(`[ACTION] Invalid action attempted by ${socket.id}`);
+      }
+    });
+
     socket.on("disconnect", () => {
       console.log(`[SOCKET] Disconnected: ${socket.id}`);
-      // No player/socket mapping logic yet – that's Sub-Issue 2
+      removePlayerFromSession(socket.id)
     });
   });
 
