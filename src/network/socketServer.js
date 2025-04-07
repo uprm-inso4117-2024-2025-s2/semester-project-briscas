@@ -1,7 +1,14 @@
 const { Server } = require("socket.io");
-const { createSession, joinSession, getSession } = require("./sessionManager");
+const {
+  createSession,
+  joinSession,
+  getSession,
+  getAllSessions,
+} = require("./sessionManager");
 
-// In-memory store for disconnected players' state
+const GameState = require("../../models/GameState");
+
+// In-memory store for disconnected players' state (for reconnect_request)
 const disconnectedPlayers = {};
 
 function initializeSocketServer(httpServer) {
@@ -15,6 +22,7 @@ function initializeSocketServer(httpServer) {
   io.on("connection", (socket) => {
     console.log(`[SOCKET] Client connected: ${socket.id}`);
 
+    // SESSION CREATION
     socket.on("createSession", () => {
       const sessionId = createSession();
       socket.emit("sessionCreated", {
@@ -24,20 +32,46 @@ function initializeSocketServer(httpServer) {
       console.log(`[SESSION] Created: ${sessionId}`);
     });
 
+    // JOIN SESSION (Normal or Reconnect via playerId)
     socket.on("joinSession", (data) => {
       const { sessionId, playerId } = data;
-      const joined = joinSession(sessionId, socket.id, playerId);
-      if (joined) {
-        // Save the player's unique identifier and session ID in the socket for later reference
-        socket.playerId = playerId;
+      const player = joinSession(sessionId, socket.id, playerId);
+
+      if (player) {
+        socket.playerId = player.playerId;
         socket.sessionId = sessionId;
+
         socket.emit("sessionJoined", {
           type: "SESSION_JOINED",
-          payload: { sessionId, playerId },
+          payload: {
+            sessionId,
+            playerId: player.playerId,
+          },
         });
+
         console.log(
-          `[SESSION] Player ${playerId} joined session ${sessionId} with socket ${socket.id}`
+          `[SESSION] Player ${player.playerId} joined session ${sessionId} with socket ${socket.id}`
         );
+
+        // Check if game can be resumed
+        const session = getSession(sessionId);
+        if (session && session.gameState) {
+          const game = session.gameState;
+          const allConnected = session.players.every((p) => p.connected);
+
+          if (game.GetGameState() === "Interrupted" && allConnected) {
+            game.restoreGameState(); // restore if needed
+            game.ChangeGameState("Playing");
+            console.log(`[GAME] Resuming game for session ${sessionId}`);
+
+            session.players.forEach((p) => {
+              io.to(p.socketId).emit("gameResumed", {
+                message: "Game resumed – all players reconnected.",
+                gameState: game.GetGameState(),
+              });
+            });
+          }
+        }
       } else {
         socket.emit("error", {
           type: "SESSION_JOIN_FAILED",
@@ -46,7 +80,17 @@ function initializeSocketServer(httpServer) {
       }
     });
 
-    // Reconnection handler
+    // 🔧 MOCK: Attach GameState to session for testing
+    socket.on("mockAttachGameState", ({ sessionId }) => {
+      const session = getSession(sessionId);
+      if (session && !session.gameState) {
+        session.gameState = new GameState();
+        session.gameState.ChangeGameState("Playing");
+        console.log(`[MOCK] GameState attached to session ${sessionId}`);
+      }
+    });
+
+    // 🔁 RECONNECT REQUEST via stored player state
     socket.on("reconnect_request", (data) => {
       const { sessionId, playerId } = data;
       if (!sessionId || !playerId) {
@@ -75,7 +119,6 @@ function initializeSocketServer(httpServer) {
         return;
       }
 
-      // Validate that the saved state belongs to the same session
       if (savedState.sessionId !== sessionId) {
         socket.emit("error", {
           type: "RECONNECT_FAILED",
@@ -84,12 +127,9 @@ function initializeSocketServer(httpServer) {
         return;
       }
 
-      // Reassign the player's unique identifier and session ID to the new socket
       socket.playerId = playerId;
       socket.sessionId = sessionId;
-      // Optionally update your session manager with the new socket.id if necessary
 
-      // Remove the player's state from the disconnected store as they've reconnected
       delete disconnectedPlayers[playerId];
 
       socket.emit("reconnect_success", {
@@ -97,28 +137,66 @@ function initializeSocketServer(httpServer) {
         payload: { message: "Reconnected successfully", state: savedState },
       });
 
-      // Notify other players in the session about the reconnection
       socket.to(sessionId).emit("player_reconnected", { playerId });
+
       console.log(
         `[SESSION] Player ${playerId} reconnected to session ${sessionId} with socket ${socket.id}`
       );
     });
 
+    // ❌ HANDLE DISCONNECT
     socket.on("disconnect", () => {
       console.log(`[SOCKET] Disconnected: ${socket.id}`);
-      // When a player disconnects, save their state if they have a playerId and sessionId
-      if (socket.playerId && socket.sessionId) {
-        // Replace these dummy values with your actual state retrieval logic
-        const state = {
-          hand: [],       // e.g., getPlayerHand(socket.playerId)
-          score: 0,       // e.g., getPlayerScore(socket.playerId)
-          isTurn: false,  // e.g., checkIfPlayerTurn(socket.playerId)
-          sessionId: socket.sessionId  // Store sessionId to ensure proper reconnection
-        };
-        disconnectedPlayers[socket.playerId] = state;
-        console.log(
-          `[SESSION] Saved state for disconnected player ${socket.playerId} in session ${socket.sessionId}`
-        );
+
+      const allSessions = getAllSessions();
+
+      for (const sessionId in allSessions) {
+        const session = allSessions[sessionId];
+        if (!session || !session.players) continue;
+
+        const player = session.players.find((p) => p.socketId === socket.id);
+        if (player) {
+          player.connected = false;
+          player.timeoutExpiresAt = Date.now() + 60000;
+
+          console.log(
+            `[DEBUG] Player state after disconnect:`,
+            JSON.stringify(player, null, 2)
+          );
+
+          // Save reconnectable state (if needed)
+          disconnectedPlayers[player.playerId] = {
+            hand: [], // TODO: populate from gameState
+            score: 0,
+            isTurn: false,
+            sessionId: sessionId,
+          };
+
+          if (session.gameState) {
+            const game = session.gameState;
+            game.handlePlayerDisconnection(player.playerId);
+
+            const connectedPlayers = session.players.filter((p) => p.connected);
+            if (connectedPlayers.length < 2) {
+              game.ChangeGameState("Interrupted");
+
+              session.players.forEach((p) => {
+                if (p.connected) {
+                  io.to(p.socketId).emit("gamePaused", {
+                    reason: "Player disconnected",
+                    players: session.players.map((p) => ({
+                      playerId: p.playerId,
+                      connected: p.connected,
+                      timeoutExpiresAt: p.timeoutExpiresAt,
+                    })),
+                  });
+                }
+              });
+            }
+          }
+
+          break;
+        }
       }
     });
   });
