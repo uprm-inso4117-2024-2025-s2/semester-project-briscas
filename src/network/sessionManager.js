@@ -49,13 +49,38 @@ function joinSession(sessionId, socketId, reconnectingPlayerId = null) {
   }
 }
 
+function leaveSession(sessionId) {
+  const session = sessions[sessionId];
+  if (!session)
+    return false;
+
+  const player = session.players.find(p => p.socketId === p.socketId);
+  if (player) {
+    player.connected = false;
+    // Players timeout after 15 seconds.
+    player.timeoutExpiresAt = Date.now() + 15000;
+
+    // If all players disconnect, destroy session
+    const closeSession = session.players.every(p => !p.connected);
+    if (closeSession) {
+      destroySession(sessionId);
+    }
+  }
+}
+
 function getSession(sessionId) { return sessions[sessionId] || null; }
 
 function getAllSessions() { return sessions; }
 
+function destroySession(sessionId) {
+  delete sessions[sessionId];
+}
+
 module.exports = {
   createSession,
   joinSession,
+  leaveSession,
   getSession,
   getAllSessions,
+  destroySession
 };
