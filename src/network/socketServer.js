@@ -2,8 +2,10 @@ const { Server } = require("socket.io");
 const {
   createSession,
   joinSession,
+  leaveSession,
   getSession,
   getAllSessions,
+  destroySession
 } = require("./sessionManager");
 
 const GameState = require("../../models/GameState");
@@ -198,6 +200,14 @@ function initializeSocketServer(httpServer) {
           break;
         }
       }
+    });
+
+    socket.on("leaveSession", ({ sessionId }) => {
+      leaveSession(sessionId, socket.id);
+    });
+
+    socket.on("destroySession", ({ sessionId }) => {
+      destroySession(sessionId);
     });
   });
 
