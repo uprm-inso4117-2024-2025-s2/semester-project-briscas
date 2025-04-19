@@ -1,12 +1,55 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/pages/GameBoard.css";
 import backgroundImg from "../assets/briscas3.jpg";
 import briscasColimg from "/assets/briscas.jpg";
 import { Link } from "react-router-dom";
 import Card from "../../../../visual_elements/VisualElements.js";
-
+import axios from "axios";
 const GameBoard = () => {
+    var player1Hand = [new Card("Copas", "11"), new Card("Bastos", "7"), new Card("Bastos","12")]; 
+    var player2Hand = [new Card("Copas", "12"), new Card("Bastos", "3"), new Card("Copas","4")];
+    var drawCard = [new Card("Bastos","11"),new Card("Copas", "3"),new Card("Bastos", "2"), new Card("Copas", "7"), new Card("Bastos","6"), new Card("Copas","5")]; // Initialization code to have placeholder states before being retrieved from the back end.
+    var gameMode = {
+        "gameMode": "1p"
+      } // Initialize gamemode assigned to website via JSON with string (possibly temporary, can be manipulated for dyanmic player/bot counts).
+      var data = {
+        "data": [player1Hand, player2Hand, drawCard] // Current array inside a JSON used to transfer data between front-end and back-end, can be filled with more data as needed.
+      }
+      const[array, setArray] = useState([]);
+      const getGamestate = async () => {
+        await axios.get("http://localhost:3000/data")
+          const response = await axios.get("http://localhost:3000/data") // Preparations to establish communication with back end.
+          setArray(response.data.data);
+          console.log(response.data.data);
+          player1Hand = response.data.data[0]
+          player2Hand = response.data.data[1]
+          drawCard = response.data.data[2] // Retrieves data from back-end and stores it
+          try {
+            setPlayer1Card(player1Hand);
+            setPlayer2Card(player2Hand);
+            setDrawPileCard(drawCard);
+            setDiscardPileCard([response.data.data[3]]);
+            setTrumpCard([new Card("Copas","1")]);
+        } catch (error) {
+            console.error("Error initializing player hand:", error); // Initialization code to display the results in the front end (was written by someone else and moved to here for the sake of organization).
+        }
+
+      };
+      const postGameState = async () => {
+          const write = await axios.post("http://localhost:3000/data", gameMode)
+          console.log(write.data.data); // Currently retuns data stored in the front end to the back end, is to be expanded to be used to feed input to the back end.
+      };
+      const postGameMode = async () => {
+        const write = await axios.post("http://localhost:3000/gameMode", gameMode) // Instance of feeding input to the back end, initializes game with correct number of players and bots including their hands.
+        console.log(write.data.gameMode);
+      };
+      useEffect(() => {
+        postGameMode();
+        getGamestate(); // Procedure run on load, used to porperly initialize game and display cards (which currently seem to be missing images).
+        
+      }, []);
+
+
     const [player1Card, setPlayer1Card] = useState<Card[]>([]);
     const [player2Card, setPlayer2Card] = useState<Card[]>([]);
     const [drawPileCard, setDrawPileCard] = useState<Card[]>([]);
@@ -24,24 +67,6 @@ const GameBoard = () => {
     const [turn, setTurn] = useState<"player1" | "player2">("player1");
     const [isFirstTurn, setIsFirstTurn] = useState<boolean>(true);
     const [p1HasDrawn, setP1HasDrawn] = useState<boolean>(true);
-
-    useEffect(() => {
-        try {
-            //This is to be replaced with the fetching of the server API whenever it's implemented
-            const player1Hand = [new Card("Copas", "11"), new Card("Bastos", "7"), new Card("Bastos","12")];
-            const player2Hand = [new Card("Copas", "12"), new Card("Bastos", "3"), new Card("Copas","4")];
-            const drawCard = [new Card("Bastos","11"),new Card("Copas", "3"),new Card("Bastos", "2"), new Card("Copas", "7"), new Card("Bastos","6"), new Card("Copas","5")];  // Example draw pile card
-
-            setPlayer1Card(player1Hand);
-            setPlayer2Card(player2Hand);
-            setDrawPileCard(drawCard);
-            setDiscardPileCard([new Card("null", "null")]);
-            setTrumpCard([new Card("Copas","1")]);
-        } catch (error) {
-            console.error("Error initializing player hand:", error);
-        }
-
-    }, []);
 
     const getCardImage = (suit: string, rank: string) => {
         try {
