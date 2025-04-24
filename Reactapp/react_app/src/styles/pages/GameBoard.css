@@ -1,58 +1,39 @@
 body {
     background-color: #E2FFFC;
-}
-
-#backgroundimg {
-    position: absolute;
-    top: 0px;
-    left: 265px;
-    width: 1655px;
-    height: 919px;
-    opacity: 15%;
     overflow: hidden;
 }
 
+#backgroundimg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;   /* Full screen width */
+  height: 100vh;  /* Full screen height */
+  object-fit: cover;  /* Maintain aspect ratio, no stretching */
+  z-index: -1;    /* Behind all content */
+  opacity: 15%;
+}
+
 #briscasColimg {
-    position: absolute;
-    top: 240px;
-    left: -340px;
-    width: 970px;
-    transform: rotate(-90deg); /* Rotates the div 45 degrees */
-}
-
-#upperButtons {
-    position: absolute;
-    background-color: none;
-    top: 0px;
-    left: 25px;
-    width: 200px;
-}
-
-#lowerButtons {
-    position: absolute;
-    background-color: none;
-    top: 630px;
-    left: 25px;
-    width: 200px;
-}
-
-.ButtonsContainer {
-    position: absolute;
-    top: 25px;
-    left: 45px;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-    gap: 0px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vh;
+    height: auto;
+    transform: rotate(-90deg) translateX(-100%);
+    transform-origin: top left;
+    pointer-events: none;
 }
 
 .buttons {
-    width: 185px;
-    height: 60px;
-    margin: 10px;
-    padding: 26px;
-    border-radius: 50px;
-    font-size: 21px;
+    width: 18vw;               /* scales with screen width */
+    min-width: 130px;          /* don't go smaller than this */
+    max-width: 185px;          /* don't grow too much either */
+    height: 8vh;               /* scales with screen height */
+    min-height: 40px;
+    padding: 1.5vh 1vw;
+    border-radius: 4vh;
+    font-size: 1.2vw;          /* scales text */
     font-weight: bold;
     color: #11524C;
     background-color: white;
@@ -60,13 +41,14 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-}
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.2s ease-in-out;
+}  
 
 /*Removes the underline in wording*/
 a {
     text-decoration: none;
 }
-
 
 .game-board {
     position: absolute;
@@ -105,11 +87,11 @@ a {
     top: 0;
     left: 0;
     z-index: 1;
-  }
-  
+}
+
 .draw-pile img.top-card {
     z-index: 2; /* Make the top card stand out, if needed */
-  }
+}
 
 .top-card.moving {
     transition: transform 0.4s ease-out;
@@ -126,14 +108,6 @@ a {
     left: -100px;
     top: 280px;
     transform: rotate(-90deg);
-}
-
-.player1-hand {
-    position: absolute;
-    left: 200px;
-    top: 600px;
-    transition: transform 0.2s ease-in-out;
-    cursor: pointer;    
 }
 
 .player2-hand {
@@ -191,3 +165,31 @@ a {
     border-radius: 8px;
 
 }
+
+.game-board-container {
+    position: relative;
+}
+
+.round-winner-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: monospace;
+    font-size: 1.8rem;
+    color: gold;
+    background: rgba(0, 0, 0, 0.75);
+    padding: 10px 20px;
+    border-radius: 8px;
+    z-index: 9999;
+    animation: fadeInOut 3.5s ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
