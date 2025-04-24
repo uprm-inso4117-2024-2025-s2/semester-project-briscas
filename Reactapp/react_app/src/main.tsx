@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import { captureLogs } from './utils/logStore';
+captureLogs(); // <-- this captures console.log BEFORE anything renders
 
 //import are already done
 import Home from './pages/Home';
