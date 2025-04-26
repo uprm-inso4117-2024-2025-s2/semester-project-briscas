@@ -1,0 +1,73 @@
+name: Baseline Test and Compare
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: |
+          mkdir -p test-results
+          node tests.js > test-results/output.txt
+
+      - name: Upload test results (only on main)
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-test-results
+          path: test-results/output.txt
+
+  compare:
+    needs: test
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Download main branch artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: Baseline Test and Compare
+          workflow_conclusion: success
+          name: main-test-results
+          branch: main
+          path: main-test-results
+
+      - name: Run tests on PR branch
+        run: |
+          mkdir -p pr-test-results
+          node tests.js > pr-test-results/output.txt
+
+      - name: Compare results (side-by-side)
+        run: |
+          echo "Comparing test results (side-by-side view)..."
+          diff --side-by-side --suppress-common-lines main-test-results/output.txt pr-test-results/output.txt || echo "Differences found (this does not fail the build)."
