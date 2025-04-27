@@ -151,7 +151,7 @@ getDeck(){ // Get the deck
       this.roundManager.playCard(`player${playerIndex + 1}`, playedCard);
 
       this.switchTurn();
-      player.draw(this.deck.draw())
+      
 
       if (
         Object.keys(this.roundManager.playedCards).length === this.getMapSize(this.players)
