@@ -2,7 +2,7 @@ const Deck = require("./Deck");
 const Player = require("./Player");
 const GameState = require("./GameState");
 const RoundManager = require("./Winner");
-const AIPlayerModel = require("../models/ai/AIPlayerModel"); //const AIPlayer = require("./AIPlayer"); Renamed
+const AIPlayerModelN = require("../models/ai/AINormal"); //const AIPlayer = require("./AIPlayer"); Renamed
 
 class GameManager {
   constructor(playerNames, turnOrder, trumpSuit) {
@@ -12,14 +12,14 @@ class GameManager {
     this.players = playerNames.map((name, index) => {
     this.gameState = new GameState(); //tweaked AI handling to better suit new code
       if (name === "AI") {
-        return new AIPlayerModel(this.gameState, [], 0, index === 0);
+        return new AIPlayerModelN(this.gameState, [], 0, index === 0);
       } 
       else {
         return new Player([], 0, index === 0);
       }
     }); // Player 1 starts with isTurn = true
     this.roundManager = new RoundManager(this.trumpCard.suit, this.getMapSize(this.players));
-    this.currentTurnIndex = 0;
+    this.currentTurnIndex = parseInt(turnOrder-1);
     // hand = [null, null, null];
     // this.gameState.ChangePlayerHands(this.players[0].hand, this.players[1].hand, this.players[2].hand, this.players[3].hand);
     this.gameState.ChangeTurn(turnOrder);
@@ -129,8 +129,9 @@ getDeck(){ // Get the deck
             Object.keys(this.roundManager.playedCards).length === this.getMapSize(this.players)
           ) {
             const roundWinner = this.roundManager.determineWinner();
-
+            console.log(`Round Winner: ${roundWinner}`);
             this.switchTurn(); // Winner starts next round
+
           }
         } catch (error) {
           console.error("AI Error:", error);
@@ -150,6 +151,7 @@ getDeck(){ // Get the deck
       this.roundManager.playCard(`player${playerIndex + 1}`, playedCard);
 
       this.switchTurn();
+      player.draw(this.deck.draw())
 
       if (
         Object.keys(this.roundManager.playedCards).length === this.getMapSize(this.players)

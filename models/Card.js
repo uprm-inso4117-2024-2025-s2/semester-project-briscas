@@ -1,5 +1,5 @@
 class Card {
-    constructor(suit, rank, id = `${suit}-${rank}-${Math.random().toString(36).substr(2, 9)}`) {
+    constructor(suit, rank) {
         this.suits = ["Oros", "Copas", "Espadas", "Bastos"];
         this.ranks = {"1": 11, "2": 0, "3": 10, "4": 0, "5": 0, "6": 0, "7": 0, "10": 2, "11": 3, "12": 4};  // Card ranks along with their corresponding points.
         
@@ -13,7 +13,6 @@ class Card {
         this.suit = suit;
         this.rank = rank;
         this.points = this.ranks[rank];
-        this.id = id; // Small tweak in case the Card definition in the front end clashes with the card definition in the back end.
     }
 
     // Returns a card with its rank, suit, and points. 
@@ -41,6 +40,12 @@ class Card {
         
         // If different suits (and neither is trump), first card wins
         return true;
+    }
+    getSuit(){
+        return this.suit
+    }
+    getRank(){
+        return this.rank
     }
 }
 

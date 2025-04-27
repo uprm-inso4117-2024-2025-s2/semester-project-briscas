@@ -1,18 +1,21 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 console.log("Testing project...")
-
-// Insert hooks into existing tests below
-
+const sleep = timer => new Promise(r => setTimeout(ret, sleep))
 const files = require("fs").readdirSync("./tests")
+const timeout = setTimeout(() => {
+    throw new Error("Timeout");
+}, 60000);
 for(const i in files){
+    clearTimeout(timeout)
     var file = files[i];
     file = file.slice(0,-3)
     console.log(file);
     try{
-        setTimeout(() => {
-            throw new Error("Timeout");
-        }, 60000);
         require("./tests/"+file);
     } catch(error){ console.log(error)}
+    await sleep(22000)
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 }
 
