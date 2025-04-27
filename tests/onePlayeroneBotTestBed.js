@@ -33,6 +33,8 @@ try{
     game.playCard(0 ,game.getCurrentPlayer().giveHand()[0])
     console.log("player 2 plays their hand")
     game.playCard(1)
+    await sleep(5000)
+    console.log(game.getPlayers(), "\n\n")
 } catch(error){ console.log(error)}
 
 try{
