@@ -10,21 +10,23 @@ class GameManager {
     this.deck.shuffle();
     this.trumpCard = this.deck.setupTrumpSuit();
     this.players = playerNames.map((name, index) => {
-    this.gameState = new GameState(); //tweaked AI handling to better suit new code
+      this.gameState = new GameState(); //tweaked AI handling to better suit new code
       if (name === "AI") {
         return new AIPlayerModel(this.gameState, [], 0, index === 0);
-      } 
-      else {
+      } else {
         return new Player([], 0, index === 0);
       }
     }); // Player 1 starts with isTurn = true
-    this.roundManager = new RoundManager(this.trumpCard.suit, this.getMapSize(this.players));
+    this.roundManager = new RoundManager(
+      this.trumpCard.suit,
+      this.getMapSize(this.players)
+    );
     this.currentTurnIndex = 0;
     // hand = [null, null, null];
     // this.gameState.ChangePlayerHands(this.players[0].hand, this.players[1].hand, this.players[2].hand, this.players[3].hand);
     this.gameState.ChangeTurn(turnOrder);
     this.gameState.ChangeTrumpSuit(trumpSuit);
-    this.gameState.ChangeDeck(new Deck)
+    this.gameState.ChangeDeck(new Deck());
     this.dealInitialHands();
   }
 
@@ -36,12 +38,14 @@ class GameManager {
       });
     }
   }
-getPlayers(){ // Get all players
-  return this.players;
-}
-getDeck(){ // Get the deck
-  return this.deck; 
-}
+  getPlayers() {
+    // Get all players
+    return this.players;
+  }
+  getDeck() {
+    // Get the deck
+    return this.deck;
+  }
   // Get current player
   getCurrentPlayer() {
     return this.players[this.currentTurnIndex];
@@ -49,25 +53,22 @@ getDeck(){ // Get the deck
 
   switchTurn() {
     this.players[this.currentTurnIndex].isTurn = false; // End current player's turn
-    if( this.getMapSize(this.players) > 4){
-      if(this.currentTurnIndex == 3){
+    if (this.getMapSize(this.players) > 4) {
+      if (this.currentTurnIndex == 3) {
         this.currentTurnIndex = 0;
+      } else {
+        this.currentTurnIndex = (this.currentTurnIndex + 1) % 4;
       }
-      else{
-      this.currentTurnIndex = (this.currentTurnIndex + 1) % 4; }
-    }
-    else{
-      if(this.currentTurnIndex+1 == (this.getMapSize(this.players))){
+    } else {
+      if (this.currentTurnIndex + 1 == this.getMapSize(this.players)) {
         // console.log("current turn = ", this.currentTurnIndex);
         this.currentTurnIndex = 0;
         // console.log("current turn = ", this.currentTurnIndex);
-
+      } else {
+        // console.log("current turn = ", this.currentTurnIndex);
+        this.currentTurnIndex = this.currentTurnIndex + 1;
+        // console.log("current turn = ", this.currentTurnIndex);
       }
-      else{
-        // console.log("current turn = ", this.currentTurnIndex);
-        this.currentTurnIndex = (this.currentTurnIndex + 1);
-        // console.log("current turn = ", this.currentTurnIndex);
-        }
     }
     this.players[this.currentTurnIndex].isTurn = true; // Set next player's turn
   }
@@ -75,11 +76,11 @@ getDeck(){ // Get the deck
   // Play a card
   /**
    * Handles a player's attempt to play a card
-   * 
+   *
    * This method manages both human and AI player turns, with special handling for AI players:
    * - For human players: Validates the move and immediately plays the provided card
    * - For AI players: Triggers an asynchronous AI decision process with built-in safeguards
-   * 
+   *
    * @param {number} playerIndex - Index of the player attempting to play
    * @param {Card} card - Card to play (required for human players, ignored for AI)
    * @throws {Error} If it's not the player's turn or a human provides no card
@@ -98,7 +99,7 @@ getDeck(){ // Get the deck
         //ai is already thinking, not calling again
         return;
       }
-      
+
       // ASYNC TURN HANDLING: Process AI turns asynchronously to prevent blocking the game loop
       // This allows the game to remain responsive during AI "thinking time"
       setTimeout(async () => {
@@ -106,16 +107,16 @@ getDeck(){ // Get the deck
           // SAFEGUARD 2: Track the original player to ensure turn hasn't changed
           // This prevents the AI from playing out of turn if game state changed during thinking
           const playerBeforeCard = playerIndex;
-          
+
           // Request a card selection from the AI player
           const aiCard = await player.handleTurn(this.gameState);
-          
+
           // SAFEGUARD 3: Verify turn hasn't changed during AI thinking
           // This prevents turn desynchronization issues
           if (this.currentTurnIndex !== playerBeforeCard) {
             return;
           }
-          
+
           // SAFEGUARD 4: Verify AI returned a valid card
           // This prevents errors when playing null or undefined cards
           if (!aiCard) {
@@ -126,7 +127,8 @@ getDeck(){ // Get the deck
           this.switchTurn();
 
           if (
-            Object.keys(this.roundManager.playedCards).length === this.getMapSize(this.players)
+            Object.keys(this.roundManager.playedCards).length ===
+            this.getMapSize(this.players)
           ) {
             const roundWinner = this.roundManager.determineWinner();
 
@@ -152,7 +154,8 @@ getDeck(){ // Get the deck
       this.switchTurn();
 
       if (
-        Object.keys(this.roundManager.playedCards).length === this.getMapSize(this.players)
+        Object.keys(this.roundManager.playedCards).length ===
+        this.getMapSize(this.players)
       ) {
         const roundWinner = this.roundManager.determineWinner();
         console.log(`Round Winner: ${roundWinner}`);
@@ -176,13 +179,47 @@ getDeck(){ // Get the deck
     this.currentTurnIndex = 0;
     console.log("Game restarted!");
   }
-   getMapSize(x) {
+  getMapSize(x) {
     var len = 0;
     for (var count in x) {
-            len++;
+      len++;
     }
-  
+
     return len;
+  }
+
+  validateAction(playerIndex, card) {
+    const player = this.players[playerIndex];
+
+    // Ensure it’s their turn
+    if (this.currentTurnIndex !== playerIndex) {
+      return { valid: false, reason: "Not your turn" };
+    }
+
+    // Ensure card is in player's hand
+    const hasCard = player.hand.some(
+      (c) => c.suit === card.suit && c.value === card.value
+    );
+    if (!hasCard) {
+      return { valid: false, reason: "Card not in hand" };
+    }
+
+    // TODO: Insert more game rules here (e.g. must follow suit if applicable)
+
+    return { valid: true };
+  }
+  exportState() {
+    return {
+      players: this.players.map((p, i) => ({
+        id: i,
+        hand: p.hand,
+        score: p.score,
+        isTurn: p.isTurn,
+      })),
+      trumpCard: this.trumpCard,
+      deck: this.deck.getDeck(), // if deck has method `getDeck()`
+      turnIndex: this.currentTurnIndex,
+    };
   }
 }
 

@@ -5,7 +5,7 @@ const {
   leaveSession,
   getSession,
   getAllSessions,
-  destroySession
+  destroySession,
 } = require("./sessionManager");
 
 const GameState = require("../../models/GameState");
@@ -83,14 +83,47 @@ function initializeSocketServer(httpServer) {
     });
 
     // 🔧 MOCK: Attach GameState to session for testing
+    // socket.on("mockAttachGameState", ({ sessionId }) => {
+    //   const session = getSession(sessionId);
+    //   if (session && !session.gameState) {
+    //     session.gameState = new GameState();
+    //     session.gameState.ChangeGameState("Playing");
+    //     console.log(`[MOCK] GameState attached to session ${sessionId}`);
+    //   }
+    // });
+
     socket.on("mockAttachGameState", ({ sessionId }) => {
       const session = getSession(sessionId);
       if (session && !session.gameState) {
-        session.gameState = new GameState();
-        session.gameState.ChangeGameState("Playing");
+        const GameState = require("../../models/GameState");
+        const Deck = require("../../models/Deck");
+
+        const game = new GameState();
+        const deck = new Deck();
+        deck.shuffle();
+
+        const hands = [[], [], [], []];
+        for (let i = 0; i < 3; i++) {
+          for (let p = 0; p < 4; p++) {
+            hands[p].push(deck.draw());
+          }
+        }
+
+        game.ChangeDeck(deck);
+        game.ChangeTrumpSuit(deck.setupTrumpSuit().suit);
+        game.ChangePlayerHands(...hands);
+        game.ChangeTurn("1");
+        game.ChangeGameState("Playing");
+
+        session.gameState = game;
+        session.mockHands = hands; // ✅ Save the hands for external access
+
         console.log(`[MOCK] GameState attached to session ${sessionId}`);
+
+        // ✅ Send mock hands for clients to simulate valid actions
+        socket.emit("mockGameStateAttached", { sessionId, hands });
       }
-    });
+    }); 
 
     // 🔁 RECONNECT REQUEST via stored player state
     socket.on("reconnect_request", (data) => {
