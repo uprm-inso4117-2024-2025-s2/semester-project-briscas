@@ -69,6 +69,9 @@ class Deck {
     displayDeck() {
         return this.deck.map((card, index) => `${index + 1}: ${card.displayCard()}`).join('\n');
     }
+    getDeck() {
+        return this.deck;
+    } // Get the entire deck of cards, in array form.
 }
 
 module.exports = Deck;
