@@ -15,7 +15,7 @@ for(const i in files){
     try{
         require("./tests/"+file);
     } catch(error){ console.log(error)}
-        await sleep(22000)
+    await sleep(22000)
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 }
 
