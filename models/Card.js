@@ -42,6 +42,12 @@ class Card {
         // If different suits (and neither is trump), first card wins
         return true;
     }
+    getSuit(){
+        return this.suit
+    }
+    getRank(){
+        return this.rank
+    }
 }
 
 // Make sure to export the entire class, not just an instance

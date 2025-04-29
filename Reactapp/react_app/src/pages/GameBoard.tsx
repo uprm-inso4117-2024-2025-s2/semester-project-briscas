@@ -13,8 +13,13 @@ const GameBoard = () => {
         "gameMode": "1p"
       } // Initialize gamemode assigned to website via JSON with string (possibly temporary, can be manipulated for dyanmic player/bot counts).
       var data = {
+<<<<<<< HEAD
         "data": [player1Hand, player2Hand, drawCard] // Current array inside a JSON used to transfer data between front-end and back-end, can be filled with more data as needed.
       }
+=======
+        "data": [player1Hand, player2Hand, drawCard, new Card("Bastos","11"), null] // Current array inside a JSON used to transfer data between front-end and back-end, can be filled with more data as needed.
+      }  
+>>>>>>> ebe13f3995e2068eecab32640b13a5fbae17831b
       const[array, setArray] = useState([]);
       const getGamestate = async () => {
         await axios.get("http://localhost:3000/data")
@@ -35,9 +40,19 @@ const GameBoard = () => {
         }
 
       };
+<<<<<<< HEAD
       const postGameState = async () => {
           const write = await axios.post("http://localhost:3000/data", gameMode)
           console.log(write.data.data); // Currently retuns data stored in the front end to the back end, is to be expanded to be used to feed input to the back end.
+=======
+      const playCard = async () => {
+          const write = await axios.post("http://localhost:3000/playerPlayCard", data)
+           // Currently retuns data stored in the front end to the back end, is to be expanded to be used to feed input to the back end.
+      };
+      const playCardai = async () => {
+          const write = await axios.post("http://localhost:3000/playerPlayCardai", data)
+           // Currently retuns data stored in the front end to the back end, is to be expanded to be used to feed input to the back end.
+>>>>>>> ebe13f3995e2068eecab32640b13a5fbae17831b
       };
       const postGameMode = async () => {
         const write = await axios.post("http://localhost:3000/gameMode", gameMode) // Instance of feeding input to the back end, initializes game with correct number of players and bots including their hands.
@@ -126,10 +141,12 @@ const GameBoard = () => {
     const handleDoubleClick = (card: Card, event: React.MouseEvent) => {
         if (turn !== "player1" && !isFirstTurn) return; // Prevent Player 1 from playing out of turn
 
-        if (!p1HasDrawn && drawPileCard.length > 0) return; // Prevent Player 1 from playing before drawing a card, if there are cards left to draw
+//        if (!p1HasDrawn && drawPileCard.length > 0) return; // Prevent Player 1 from playing before drawing a card, if there are cards left to draw
 
          //Here an API post of the removed Card will be sent to the server so the backend can know which card was played
-
+         console.log(card)
+        data.data[4] = card;
+         playCard();
         setMovingCard(card);
         calculateOffset(event);
     
@@ -162,6 +179,8 @@ const GameBoard = () => {
         // Pick a random card from Player 2's hand
         const randomIndex = Math.floor(Math.random() * player2Card.length);
         const aiCard = player2Card[randomIndex];
+        data.data[4] = aiCard;
+        playCardai();
     
         setFlippingCard(aiCard); // Start flipping animation
         setTimeout(() => {
@@ -193,6 +212,7 @@ const GameBoard = () => {
         setTimeout(() => {
             handlePlayer2DrawCard();
         }, 1800);
+        getGamestate();
     };
 
     const handleDrawCard = (event: React.MouseEvent) => {
