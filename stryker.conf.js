@@ -14,7 +14,6 @@ module.exports = {
 	  spec: ["tests/legacy-tests.js"],
 	  ignore: [
 		  // ignore ai tests and performance tests ai is not vetted and performance does not fit in our model 
-		  "tests/*AI*",
 		  "tests/Performance*",
 	  ]
   },
@@ -22,6 +21,7 @@ module.exports = {
   coverageAnalysis: "off",
   mutate: [
     "models/*.js",
+    "models/ai/*.js",
 // ignore tests and data files 
     "!models/**/*Test.js",
     "!models/card_values.js",

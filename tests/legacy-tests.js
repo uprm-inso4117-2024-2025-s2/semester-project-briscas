@@ -10,8 +10,6 @@ const testDir = __dirname;
 // Gather all *Test.js files, excluding AI and Performance tests
 const legacyTests = fs.readdirSync(testDir)
   .filter((file) => file.endsWith('Test.js'))
-// exclude AI not vetted yet 
-  .filter((file) => !file.includes('AI'))          // exclude any file with 'AI' in its name
 // exclude perfomance testing due to the scope and nature of mutation testing 
   .filter((file) => !file.startsWith('Performance')); // exclude 'PerformanceTest.js'
 
