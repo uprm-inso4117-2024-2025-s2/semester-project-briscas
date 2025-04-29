@@ -3,6 +3,7 @@ const Player = require("./Player");
 const GameState = require("./GameState");
 const RoundManager = require("./Winner");
 const AIPlayerModel = require("../models/ai/AIPlayerModel"); //const AIPlayer = require("./AIPlayer"); Renamed
+const AINormal = require("../models/ai/AINormal");
 
 class GameManager {
   constructor(playerNames, turnOrder, trumpSuit) {
@@ -12,7 +13,7 @@ class GameManager {
     this.players = playerNames.map((name, index) => {
     this.gameState = new GameState(); //tweaked AI handling to better suit new code
       if (name === "AI") {
-        return new AIPlayerModel(this.gameState, [], 0, index === 0);
+        return new AINormal(this.gameState, [], 0, index === 0);
       } 
       else {
         return new Player([], 0, index === 0);
