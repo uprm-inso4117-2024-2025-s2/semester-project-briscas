@@ -2,7 +2,7 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
 console.log("Testing project...")
-const sleep = timer => new Promise(r => setTimeout(ret, sleep))
+const sleep = timer => new Promise(r => setTimeout(r, sleep))
 const files = require("fs").readdirSync("./tests")
 const timeout = setTimeout(() => {
     throw new Error("Timeout");
