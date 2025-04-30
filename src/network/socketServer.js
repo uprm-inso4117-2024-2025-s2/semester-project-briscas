@@ -6,6 +6,8 @@ const {
   getSession,
   getAllSessions,
   destroySession,
+  handlePlayerMoves,
+  getSocketIdSession,
 } = require("./sessionManager");
 
 const GameState = require("../../models/GameState");
@@ -318,6 +320,14 @@ function initializeSocketServer(httpServer) {
           break;
         }
       }
+    });
+
+    socket.on("getSocketIdSession", ({ socketId }) => {
+      getSocketIdSession(socketId);
+    });
+
+    socket.on("handlePlayerMoves", ({ sessionId, playerId, card }) => {
+      handlePlayerMoves(sessionId, playerId, card);
     });
 
     socket.on("leaveSession", ({ sessionId }) => {

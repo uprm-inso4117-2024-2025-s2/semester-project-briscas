@@ -1,4 +1,5 @@
 const {v4 : uuidv4} = require("uuid");
+const GameManager = require("../../models/GameManager");
 
 // In-memory storage of sessions
 const sessions = {};
@@ -10,6 +11,7 @@ function createSession() {
         [], // Each player: { socketId, playerId, connected, timeoutExpiresAt }
     createdAt : Date.now(),
     gameState : null, // Make sure we track gameState per session (optional)
+    gameManager : GameManager
   };
   return sessionId;
 }
@@ -49,10 +51,37 @@ function joinSession(sessionId, socketId, reconnectingPlayerId = null) {
   }
 }
 
-function leaveSession(sessionId) {
+function getSocketIdSession(socketId) {
+  for (const sessionId in sessions) {
+    const session = sessions[sessionId];
+
+    if (session.players.find(p => p.socketId === socketId)) {
+      return { sessionId, session };
+    }
+  }
+
+  return null;
+}
+
+function handlePlayerMoves(sessionId, playerId, card) {
+  const session = getSession(sessionId);
+  if (!session) {
+    throw new Error("Session couldn't be found");
+  }
+
+  const playerIndex = session.players.findIndex(p => p.playerId === playerId);
+  if (playerIndex == -1) {
+    throw new Error("Player couldn't be found in session");
+  }
+
+  session.GameManager.playCard(playerIndex, card);
+}
+
+function leaveSession(sessionId, socketId) {
   const session = sessions[sessionId];
-  if (!session)
+  if (!session) {
     return false;
+  }
 
   const player = session.players.find(p => p.socketId === p.socketId);
   if (player) {
@@ -82,5 +111,7 @@ module.exports = {
   leaveSession,
   getSession,
   getAllSessions,
-  destroySession
+  destroySession,
+  handlePlayerMoves,
+  getSocketIdSession
 };
