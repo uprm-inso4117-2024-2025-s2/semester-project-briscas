@@ -233,7 +233,7 @@ const GameBoard = () => {
     }, [columnCenter]);
 
     useEffect(() => {
-        if (currentTurn === "2" && player2Card.length > 0 && !aiHasPlayed) {
+        if (currentTurn === "2" && player2Card.length > 0 && !aiHasPlayed && !isGamePaused) {
         console.log("[TURN] AI's turn — playing a card...");
         setAiHasPlayed(true);
         handlePlayer2Play();
@@ -457,6 +457,7 @@ const getCardImage = (suit: string, rank: string) => {
     };
 
     const handleDoubleClick = (card: Card, event: React.MouseEvent) => {
+        if(isGamePaused) return; // Prevent actions if the game is paused
         console.log("Clicked a card:");
         console.log("  currentTurn:", currentTurn);
         console.log("  isFirstTurn:", isFirstTurn);
@@ -556,10 +557,61 @@ const getCardImage = (suit: string, rank: string) => {
         }, 400);
     };
     
+    const [isGamePaused, setIsGamePaused] = useState(false);
+    const handleNewGame = async () => {
+        try {
+            // Reset all game state
+            setPlayer1Card([]);
+            setPlayer2Card([]);
+            setDrawPileCard([]);
+            setDiscardPileCard([]);
+            setTrumpCard([]);
+            setPlayer1Score(0);
+            setPlayer2Score(0);
+            setPlayer1PlayedCard(null);
+            setPlayer2PlayedCard(null);
+            setCurrentTurn("1");
+            setIsFirstTurn(true);
+            setP1HasDrawn(true);
+            setIsGamePaused(false);
+            setRoundWinner(null);
+            setIsRoundResolving(false);
+            
+            // Reinitialize the game
+            console.log("[GAME] Starting new game...");
+            await postGameMode();
+            console.log("[GAME] Game mode posted");
+            await getGamestate();
+            console.log("[GAME] Game state fetched");
+            
+            console.log("[GAME] New game started successfully");
+        } catch (error) {
+            console.error("[ERROR] Failed to start new game:", error);
+        }
+    };
+    
+    const handlePauseGame = () => {
+        setIsGamePaused(true);
+        socket.emit("pauseGame", { reason: "Player initiated pause" });
+        console.log("[GAME] Game paused");
+    };
+    
+    const handleResumeGame = () => {
+        setIsGamePaused(false);
+        socket.emit("resumeGame", {});
+        console.log("[GAME] Game resumed");
+    };
+
     return (
     <div className="body">
         <img id="backgroundimg" src={backgroundImg} />
         <img id="briscasColimg" src={briscasColimg} ref={columnRef} />
+
+        {isGamePaused && (
+        <div className="paused-overlay">
+            <div className="paused-message">GAME PAUSED</div>
+        </div>
+)}
 
         <div id="upperButtons" style={{
             position: "fixed",
@@ -574,17 +626,20 @@ const getCardImage = (suit: string, rank: string) => {
             <button className="buttons" onClick={() => setDebugOpen(true)}>DEBUG</button>
         </div>
         <div id="lowerButtons" style={{
-            position: "fixed",
-            bottom: "2vh",
-            left: `${columnCenter}px`,
-            transform: "translateX(-50%)",
-            zIndex: 10,
-        }}
-        >
-                <button className = "buttons"> Pause Game</button> 
-                <button className = "buttons"> New Game</button> 
-                <button className = "buttons"> Exit Game</button> 
-        </div>
+    position: "fixed",
+    bottom: "2vh",
+    left: `${columnCenter}px`,
+    transform: "translateX(-50%)",
+    zIndex: 10,
+}}>
+    {isGamePaused ? (
+        <button className="buttons" onClick={handleResumeGame}>Resume Game</button>
+    ) : (
+        <button className="buttons" onClick={handlePauseGame}>Pause Game</button>
+    )}
+    <button className="buttons" onClick={handleNewGame}>New Game</button>
+    <Link to='/'><button className="buttons">Exit Game</button></Link>
+</div>
 
         {currentTurn && (
             <div
