@@ -1,13 +1,8 @@
-//install
-// npm install --save-dev mocha
-//run with
-// npm install --save-dev mocha
-
 const assert = require("assert");
 const AINormal = require("../models/ai/AINormal");
 const Card = require("../models/Card");
 
-// FakeGameState simulates the minimal interface needed by AINormal.
+// Minimal FakeGameState mock
 class FakeGameState {
   constructor(trumpSuit, turn, playedCards) {
     this.trumpSuit = trumpSuit;
@@ -25,71 +20,57 @@ class FakeGameState {
   }
 }
 
-describe("AINormal Class", function () {
-  describe("Move Selection Logic", function () {
-    it("should play a winning trump card if the opponent plays a trump", function () {
-      const trumpSuit = "Espadas";
-      const fakeGameState = new FakeGameState(trumpSuit, "1", {
-        1: new Card(trumpSuit, "11"),
-      });
-      const hand = [
-        new Card(trumpSuit, "12"), // 4 points
-        new Card(trumpSuit, "1"), // 11 points
-        new Card("Copas", "7"), // Non-trump
-      ];
-      const ai = new AINormal(fakeGameState, hand);
-      ai.isTurn = true;
-      const selected = ai.selectCard();
-
-      assert.strictEqual(selected.suit, trumpSuit);
-      assert.strictEqual(selected.rank, "12");
+// Simple test runner
+function runTest(name, fn) {
+  Promise.resolve()
+    .then(fn)
+    .then(() => console.log(`✅ ${name}`))
+    .catch((err) => {
+      console.error(`❌ ${name}`);
+      console.error(err);
+      process.exitCode = 1;
     });
+}
 
-    it("should play a trump card if opponent played non-trump and AI has trump", function () {
-      const trumpSuit = "Oros";
-      const fakeGameState = new FakeGameState(trumpSuit, "1", {
-        1: new Card("Copas", "10"),
-      });
-      const hand = [
-        new Card(trumpSuit, "7"), // Lowest trump
-        new Card("Copas", "3"), // Non-trump
-      ];
-      const ai = new AINormal(fakeGameState, hand);
-      ai.isTurn = true;
-      const selected = ai.selectCard();
+// --- Move Selection Logic ---
+runTest("plays winning trump if opponent plays trump", () => {
+  const trump = "Espadas";
+  const gs = new FakeGameState(trump, "1", { 1: new Card(trump, "11") });
+  const hand = [new Card(trump, "12"), new Card(trump, "1"), new Card("Copas", "7")];
+  const ai = new AINormal(gs, hand);
+  ai.isTurn = true;
+  const selected = ai.selectCard();
+  assert.strictEqual(selected.suit, trump);
+  assert.strictEqual(selected.rank, "12");
+});
 
-      assert.strictEqual(selected.suit, trumpSuit);
-      assert.strictEqual(selected.rank, "7"); // AI should play the trump card
-    });
+runTest("plays trump if opponent plays non-trump", () => {
+  const trump = "Oros";
+  const gs = new FakeGameState(trump, "1", { 1: new Card("Copas", "10") });
+  const hand = [new Card(trump, "7"), new Card("Copas", "3")];
+  const ai = new AINormal(gs, hand);
+  ai.isTurn = true;
+  const selected = ai.selectCard();
+  assert.strictEqual(selected.suit, trump);
+  assert.strictEqual(selected.rank, "7");
+});
 
-    it("should throw an error if no cards are available", function () {
-      const trumpSuit = "Bastos";
-      const fakeGameState = new FakeGameState(trumpSuit, "1", { 1: null });
-      const hand = [];
-      const ai = new AINormal(fakeGameState, hand);
-      ai.isTurn = true;
+runTest("throws error when hand is empty", () => {
+  const gs = new FakeGameState("Bastos", "1", { 1: null });
+  const ai = new AINormal(gs, []);
+  ai.isTurn = true;
+  assert.throws(() => ai.selectCard(), /No card selected in Normal mode/);
+});
 
-      assert.throws(() => ai.selectCard(), /No card selected in Normal mode/);
-    });
-  });
-
-  describe("handleTurn Method", function () {
-    it("should return the selected card after thinking time", async function () {
-      const trumpSuit = "Espadas";
-      const fakeGameState = new FakeGameState(trumpSuit, "1", {
-        1: new Card(trumpSuit, "11"),
-      });
-      const hand = [
-        new Card(trumpSuit, "12"), // Winning trump card
-        new Card("Copas", "7"),
-      ];
-      const ai = new AINormal(fakeGameState, hand);
-      ai.isTurn = true;
-      ai.setThinkingTime(10); // Short delay for testing
-      const selected = await ai.handleTurn();
-
-      assert.strictEqual(selected.suit, trumpSuit);
-      assert.strictEqual(selected.rank, "12");
-    });
-  });
+// --- handleTurn Method ---
+runTest("handleTurn returns selected card after thinking", async () => {
+  const trump = "Espadas";
+  const gs = new FakeGameState(trump, "1", { 1: new Card(trump, "11") });
+  const hand = [new Card(trump, "12"), new Card("Copas", "7")];
+  const ai = new AINormal(gs, hand);
+  ai.isTurn = true;
+  ai.setThinkingTime(10);
+  const selected = await ai.handleTurn();
+  assert.strictEqual(selected.suit, trump);
+  assert.strictEqual(selected.rank, "12");
 });
