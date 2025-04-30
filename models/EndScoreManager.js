@@ -156,8 +156,9 @@ function runTestCases() {
   console.assert(player2.totalScore === 0 && player2.collectedCards.length === 0 && player2.roundsWon === 0, 'Reset failed for Player 2');
   console.log('Reset functionality works as expected.');
 }
-
-runTestCases();
+if (require.main === module) {
+	runTestCases();
+}
 
 module.exports = FinalScoreManager;
 

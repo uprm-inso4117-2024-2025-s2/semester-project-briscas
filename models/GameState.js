@@ -296,12 +296,26 @@ class GameState {
         startTime: Date.now(),
         timeoutMs: 5000
       };
+      // Start a timeout to auto-pass if the player takes too long
+      setTimeout(() => {
+        if (this.current_action.inProgress && Date.now() - this.current_action.startTime > this.current_action.timeoutMs) {
+          console.warn(`Player ${playerId} action timed out. Performing fallback action.`);
+          this.autoPass(playerId);
+        }
+      }, this.current_action.timeoutMs);
       return true;
     } catch (error) {
       console.error("Failed to begin action:", error);
       this.game_status.lastError = error.message;
       return false;
     }
+  }
+
+  autoPass(playerId) {
+    // Implement the logic for auto-passing or playing the lowest card
+    console.log(`Auto-passing for player ${playerId}`);
+    // Example: play the lowest card or pass
+    this.completeAction();
   }
 
   completeAction() {

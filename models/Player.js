@@ -14,7 +14,7 @@ class Player{
     }
     temporaryHand = null;
     giveHand(){
-        return hand;
+        return this.hand;
         //Return the given hand of the player.
     }
 
@@ -114,6 +114,9 @@ class Player{
 
     turnToggle(){
         this.isturn = !this.isturn;
+    }
+    setInitialHand(card){
+        this.hand.push(card); // Only used for preparing the player's hand on round start.
     }
 }
 

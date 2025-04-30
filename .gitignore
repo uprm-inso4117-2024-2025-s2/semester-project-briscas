@@ -16,3 +16,6 @@ node_modules/
         }
     ]
 }
+.stryker-tmp
+/models/.stryker-tmp
+reports

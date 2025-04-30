@@ -8,12 +8,12 @@ console.log("=== AI TEST: GAMESTATE INTEGRATION ===\n");
 
 // Setup GameState
 const gameState = new GameState();
-const aiPlayer = new AIPlayerModel([new Card("Oros", "7"), new Card("Espadas", "3")], 0, true); // newly implemented AIPlayerModel replacing the dummy player class, which is directly given the gameState
+const aiPlayer = new AIPlayerModel(gameState, [new Card("Oros", "7"), new Card("Espadas", "3")], 0, true);
 const humanPlayer = new Player([new Card("Copas", "1"), new Card("Oros", "5")], 0, false);
 const roundManager = new RoundManager("Oros");
 
 // Assign hands to GameState
-gameState.ChangePlayerHands(aiPlayer.hand, humanPlayer.hand);
+gameState.ChangePlayerHands(aiPlayer.hand, humanPlayer.hand, null, null);
 gameState.ChangeTurn("1"); // AI starts (Player 1)
 gameState.ChangeTrumpSuit("Oros"); // Set Trump Suit
 
@@ -21,18 +21,18 @@ gameState.ChangeTrumpSuit("Oros"); // Set Trump Suit
 //const ai = new AIPlayerModel(gameState); deprecated
 //ai.handleTurn();  // Expected output: AI retrieves correct game data
 // AI Plays a Move
-const aiHand = gameState.GetPlayerHand(0); // AI's hand from GameState
-const aiCard = aiHand.pop(); // AI plays the first available card
+const aiCard = aiPlayer.hand[0]; // Get the first card from AI's hand
+aiPlayer.hand = aiPlayer.hand.filter(card => card !== aiCard); // Remove the card from AI's hand
 
 console.log(`AI plays: ${aiCard.rank} of ${aiCard.suit}`);
-gameState.ChangePlayedCards(aiCard, null);
+gameState.ChangePlayedCards(aiCard, null, null, null);
 
 // Verify AI's played card is stored in GameState
 const playedCards = gameState.GetPlayedCards(0);
 console.log(`GameState recorded AI's played card: ${playedCards.rank} of ${playedCards.suit}`);
 
 // Ensure AI's hand updates in GameState
-gameState.ChangePlayerHands(aiHand, gameState.GetPlayerHand(1));
+gameState.ChangePlayerHands(aiPlayer.hand, gameState.GetPlayerHand(1), null, null);
 
 // Turn Switch to Human
 gameState.ChangeTurn("2");
@@ -49,14 +49,14 @@ const humanHand = gameState.GetPlayerHand(1);
 const humanCard = humanHand.pop(); // Human plays a card
 
 console.log(`Human plays: ${humanCard.rank} of ${humanCard.suit}`);
-gameState.ChangePlayedCards(aiCard, humanCard);
+gameState.ChangePlayedCards(aiCard, humanCard, null, null);
 
 // Verify Human's played card is stored in GameState
 const playedCardsHuman = gameState.GetPlayedCards(1);
 console.log(`GameState recorded Human's played card: ${playedCardsHuman.rank} of ${playedCardsHuman.suit}`);
 
 // Ensure Human's hand updates in GameState
-gameState.ChangePlayerHands(gameState.GetPlayerHand(0), humanHand);
+gameState.ChangePlayerHands(gameState.GetPlayerHand(0), humanHand, null, null);
 
 // Turn Switches Back to AI
 gameState.ChangeTurn("1");

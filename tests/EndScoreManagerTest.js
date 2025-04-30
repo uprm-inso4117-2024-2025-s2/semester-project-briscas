@@ -1,8 +1,8 @@
-const Player = require('./Player');
-const Card = require('./Card');
-const Deck = require('./Deck');
-const GameState = require('./GameState');
-const FinalScoreManager = require('./EndScoreManager');
+const Player = require('../models/Player');
+const Card = require('../models/Card');
+const Deck = require('../models/Deck');
+const GameState = require('../models/GameState');
+const FinalScoreManager = require('../models/EndScoreManager');
 
 function runTestCases() {
   const mockUICallback = (data) => console.log('UI Data:', data);
@@ -28,7 +28,8 @@ function runTestCases() {
   console.assert(player2.totalScore === 0 && player2.collectedCards.length === 0 && player2.roundsWon === 0, 'Reset failed for Player 2');
   console.log('Reset functionality works as expected.');
 }
-
-runTestCases();
+if (require.main === module) {
+	runTestCases();
+}
 
 module.exports = runTestCases;
