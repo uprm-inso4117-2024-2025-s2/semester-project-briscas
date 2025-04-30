@@ -15,6 +15,26 @@ const GameState = require("../../models/GameState");
 // In-memory store for disconnected players' state (for reconnect_request)
 const disconnectedPlayers = {};
 
+// Helper function to validate player actions
+function validateAction(gameState, playerId, action) {
+  if (!action || typeof action !== "object" || !action.type || !action.cardId) {
+    return false;
+  }
+
+  if (gameState.GetTurn() !== String(playerId)) {
+    console.warn(`Validation failed: Not player's turn`);
+    return false;
+  }
+
+  const hand = gameState.GetPlayerHand(playerId - 1);
+  if (!hand || !hand.some((card) => card.id === action.cardId)) {
+    console.warn(`Validation failed: Card not in hand`);
+    return false;
+  }
+
+  return true; // Passes all checks
+}
+
 function initializeSocketServer(httpServer) {
   const io = new Server(httpServer, {
     cors: {
@@ -147,6 +167,104 @@ function initializeSocketServer(httpServer) {
         `[SESSION] Player ${playerId} reconnected to session ${sessionId} with socket ${socket.id}`
       );
     });
+    //---Functions valid action loadtest---///
+    //Alternate mockgame state to hangle playes in load testing session//
+    //not for real gamestate,just for a load test
+
+    socket.on("fullMockGameState", ({ sessionId, numPlayers }) => {
+      const session = getSession(sessionId);
+      if (session) {
+        session.gameState = new GameState();
+        session.gameState.ChangeGameState("Playing");
+
+        session.gameState.playersHands = {};
+        for (let playerId = 1; playerId <= numPlayers; playerId++) {
+          session.gameState.playersHands[playerId] = [
+            { id: `card-${playerId}-0`, rank: "2", suit: "swords" },
+            { id: `card-${playerId}-1`, rank: "5", suit: "cups" },
+            { id: `card-${playerId}-2`, rank: "king", suit: "coins" },
+          ];
+        }
+
+        session.gameState.currentTurn = 1;
+
+        session.gameState.GetTurn = () => String(session.gameState.currentTurn);
+        session.gameState.GetPlayerHand = (playerId) =>
+          session.gameState.playersHands[playerId + 1];
+
+        console.log(
+          `[TEST SETUP] Full GameState initialized for session ${sessionId}`
+        );
+      }
+    });
+
+    socket.on("playerAction", (action) => {
+      const session = getSession(socket.sessionId);
+      if (!session || !session.gameState) {
+        socket.emit("error", {
+          type: "INVALID_SESSION",
+          payload: { message: "Session not found" },
+        });
+        return;
+      }
+
+      const playerId = socket.playerId;
+      if (typeof playerId !== "number") {
+        socket.emit("error", {
+          type: "INVALID_PLAYER",
+          payload: { message: "Invalid player ID" },
+        });
+        return;
+      }
+
+      try {
+        if (!validateAction(session.gameState, playerId, action)) {
+          throw new Error("Invalid action detected");
+        }
+
+        // Apply action (Remove card from hand)
+        const playerHand = session.gameState.GetPlayerHand(playerId - 1);
+        const cardIndex = playerHand.findIndex((c) => c.id === action.cardId);
+        if (cardIndex === -1)
+          throw new Error("Card not found in player's hand");
+        const playedCard = playerHand.splice(cardIndex, 1)[0];
+
+        console.log(
+          `Player ${playerId} played ${playedCard.rank} of ${playedCard.suit}`
+        );
+
+        // 🔑 IMPORTANT: Properly update turn on the server side
+        session.gameState.currentTurn =
+          (session.gameState.currentTurn % 50) + 1;
+
+        socket.emit("actionAccepted", { playerId, action });
+      } catch (error) {
+        socket.emit("error", {
+          type: "INVALID_ACTION",
+          payload: { message: error.message },
+        });
+        socket.emit("resync", { gameState: session.gameState });
+      }
+    });
+    //---Functions valid action loadtest---///
+
+    //---Functions for resync---///
+
+    socket.on("resyncRequest", () => {
+      const session = getSession(socket.sessionId);
+      if (!session || !session.gameState) {
+        socket.emit("error", {
+          type: "INVALID_SESSION",
+          payload: { message: "Cannot resync, session not found" },
+        });
+        return;
+      }
+
+      console.log(`Resync requested by player ${socket.id}`);
+      socket.emit("resync", { gameState: session.gameState });
+    });
+
+    //---Functions for resync---///
 
     // ❌ HANDLE DISCONNECT
     socket.on("disconnect", () => {
