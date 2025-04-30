@@ -561,32 +561,28 @@ const getCardImage = (suit: string, rank: string) => {
     const handleNewGame = async () => {
         try {
             // Reset all game state
-            setPlayer1Card([]);
-            setPlayer2Card([]);
-            setDrawPileCard([]);
-            setDiscardPileCard([]);
-            setTrumpCard([]);
+            const player1Hand = [new Card("Copas", "11"), new Card("Bastos", "7"), new Card("Bastos","12")];
+            const player2Hand = [new Card("Copas", "12"), new Card("Bastos", "3"), new Card("Copas","4")];
+            const drawCard = [new Card("Bastos","11"),new Card("Copas", "3"),new Card("Bastos", "2"), new Card("Copas", "7"), new Card("Bastos","6"), new Card("Copas","5")];
+    
+            setPlayer1Card(player1Hand);
+            setPlayer2Card(player2Hand);
+            setDrawPileCard(drawCard);
+            setDiscardPileCard([new Card("null", "null")]);
+            setTrumpCard([new Card("Copas","1")]);
+            setCurrentTurn("1"); // Changed from setTurn to setCurrentTurn
+            setIsFirstTurn(true);
+            setP1HasDrawn(true);
             setPlayer1Score(0);
             setPlayer2Score(0);
             setPlayer1PlayedCard(null);
             setPlayer2PlayedCard(null);
-            setCurrentTurn("1");
-            setIsFirstTurn(true);
-            setP1HasDrawn(true);
-            setIsGamePaused(false);
             setRoundWinner(null);
             setIsRoundResolving(false);
             
-            // Reinitialize the game
-            console.log("[GAME] Starting new game...");
-            await postGameMode();
-            console.log("[GAME] Game mode posted");
-            await getGamestate();
-            console.log("[GAME] Game state fetched");
-            
-            console.log("[GAME] New game started successfully");
+            console.log("New game started");
         } catch (error) {
-            console.error("[ERROR] Failed to start new game:", error);
+            console.error("Error starting new game:", error);
         }
     };
     
