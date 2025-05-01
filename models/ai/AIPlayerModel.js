@@ -33,14 +33,16 @@ class AIPlayerModel extends Player {
     this.isThinking = false;
 
     /**
-     * Reference to the active game state for the AI to query (turn checks, etc.).
+     * Reference to the active game state for the AI to query (turn checks,
+     * etc.).
      */
     this.gameState = gameState;
   }
 
   /**
    * Abstract method: selectCard.
-   * Subclasses must override this method to implement their card selection logic.
+   * Subclasses must override this method to implement their card selection
+   * logic.
    * @returns {Card} The card selected to play.
    */
   selectCard() {
@@ -48,24 +50,17 @@ class AIPlayerModel extends Player {
   }
 
   /**
-   * handleTurn()
-   * -----------
-   * Main entry point for the AI's turn logic. This method simulates "thinking"
-   * by waiting a specified duration before selecting a card. It also includes
-   * a fallback timer to ensure the AI never gets stuck if something goes wrong.
-   * 
-   *   Note: Without a valid GameState or an implementation of selectCard() in a subclass,
-    * this method may time out and fall back to the default card.
+   * Executes the AI’s thinking and card-selection process.
    *
-   * Steps:
-   *  1) Check that there's an active turn in the gameState.
-   *  2) Confirm it is indeed this player's turn.
-   *  3) Prevent concurrent "thinking" calls if we're already in the middle of one.
-   *  4) Set up a fallback timeout that picks the first card in the hand if the
-   *     main decision logic doesn’t complete in time (safety net).
-   *  5) Within the main timeout, call this.selectCard() to pick a card and resolve.
+   * Preconditions:
+   * - It must be the AI’s turn (isTurn === true).
+   * - AI must not already be thinking.
    *
-   * @returns {Promise<Card>} Resolves with the card chosen by the AI.
+   * Postconditions:
+   * - Returns a Card selected using `selectCard()`.
+   * - Fallback triggers if selection fails or times out.
+   *
+   * @returns {Promise<Card>} Resolves with the selected card or fallback.
    */
   async handleTurn() {
     // 1) Make sure the gameState has an active turn.
@@ -144,9 +139,7 @@ class AIPlayerModel extends Player {
    * Utility to check if it is this AI's turn and it's not currently "thinking."
    * @returns {boolean}
    */
-  isMyTurn() {
-    return this.isTurn && !this.isThinking;
-  }
+  isMyTurn() { return this.isTurn && !this.isThinking; }
 
   /**
    * setThinkingTime(milliseconds)
@@ -154,9 +147,7 @@ class AIPlayerModel extends Player {
    * Allows dynamic configuration of how long the AI waits before playing.
    * @param {number} milliseconds - The new thinking time in milliseconds.
    */
-  setThinkingTime(milliseconds) {
-    this.thinkingTime = milliseconds;
-  }
+  setThinkingTime(milliseconds) { this.thinkingTime = milliseconds; }
 
   /**
    * Plays a card from the AI's hand.
@@ -166,7 +157,8 @@ class AIPlayerModel extends Player {
    * @returns {Card} The played card.
    */
   playCard(card) {
-    // Ensure the AI is no longer in a thinking state once we actually play a card.
+    // Ensure the AI is no longer in a thinking state once we actually play a
+    // card.
     this.isThinking = false;
 
     // If the specified card isn't actually in the AI’s hand, error out.
@@ -185,7 +177,8 @@ class AIPlayerModel extends Player {
     }
 
     // Remove the played card from the hand, allowing the AI to draw again.
-    this.hand = this.hand.filter(c => c.rank !== card.rank || c.suit !== card.suit);
+    this.hand =
+        this.hand.filter(c => c.rank !== card.rank || c.suit !== card.suit);
     this.canDraw = true;
     return super.playCard(card);
   }

@@ -73,17 +73,23 @@ getDeck(){ // Get the deck
     this.players[this.currentTurnIndex].isTurn = true; // Set next player's turn
   }
 
-  // Play a card
   /**
-   * Handles a player's attempt to play a card
-   * 
-   * This method manages both human and AI player turns, with special handling for AI players:
-   * - For human players: Validates the move and immediately plays the provided card
-   * - For AI players: Triggers an asynchronous AI decision process with built-in safeguards
-   * 
-   * @param {number} playerIndex - Index of the player attempting to play
-   * @param {Card} card - Card to play (required for human players, ignored for AI)
-   * @throws {Error} If it's not the player's turn or a human provides no card
+   * Handles a human or AI player’s attempt to play a card.
+   *
+   * Preconditions:
+   * - The player index must match the current turn index.
+   * - For human players, a valid card must be provided.
+   * - For AI players, the AI must not already be thinking.
+   *
+   * Postconditions:
+   * - The card is removed from the player's hand.
+   * - The card is stored in the RoundManager.
+   * - Turn is switched to the next player.
+   * - If all players have played, the round winner is determined.
+   *
+   * @param {number} playerIndex - Index of the player attempting to play.
+   * @param {Card|null} card - The card to play (required for human players).
+   * @throws {Error} If turn or card validity fails.
    */
   playCard(playerIndex, card = null) {
     const player = this.players[playerIndex];
